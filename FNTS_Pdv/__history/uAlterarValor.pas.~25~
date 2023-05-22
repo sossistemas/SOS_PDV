@@ -1,0 +1,96 @@
+unit uAlterarValor;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SOSSolution.Controls, AdvGlowButton, Vcl.StdCtrls, Vcl.Mask, RzEdit, RzLabel, Data.DB;
+
+type
+  TfrmAlterarValorUnitario = class(TForm)
+    RzLabel1: TRzLabel;
+    ed_unitario: TRzNumericEdit;
+    bgravar: TAdvGlowButton;
+    bcancelar: TAdvGlowButton;
+    RoundShape1: TRoundShape;
+    RoundShape2: TRoundShape;
+    RoundShape3: TRoundShape;
+    procedure FormCreate(Sender: TObject);
+    procedure bcancelarClick(Sender: TObject);
+    procedure bgravarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmAlterarValorUnitario: TfrmAlterarValorUnitario;
+
+implementation
+
+uses
+  venda, modulo;
+
+{$R *.dfm}
+
+//frmModulo.qrItens
+
+procedure MakeRounded(Control: TWinControl);
+var
+  R: TRect;
+  Rgn: HRGN;
+begin
+  with Control do
+  begin
+    R := ClientRect;
+    rgn := CreateRoundRectRgn(R.Left, R.Top, R.Right, R.Bottom, 20, 20);
+    Perform(EM_GETRECT, 0, lParam(@r));
+    InflateRect(r, - 5, - 5);
+    Perform(EM_SETRECTNP, 0, lParam(@r));
+    SetWindowRgn(Handle, rgn, True);
+    Invalidate;
+  end;
+end;
+
+procedure TfrmAlterarValorUnitario.bcancelarClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmAlterarValorUnitario.bgravarClick(Sender: TObject);
+var
+ lNovoTotal: Double;
+ lModoEdicaoAtivo: Boolean;
+begin
+  if ed_unitario.Value < frmModulo.qrItensVALOR_UNITARIO.Value then
+  begin
+    lModoEdicaoAtivo := frmModulo.qrItens.state = dsEdit;
+    if not lModoEdicaoAtivo then
+      frmModulo.qrItens.Edit;
+    ///
+    lNovoTotal := ed_unitario.Value * frmModulo.qrItensQTDE;
+    rTotal_Venda := rTotal_Venda - (frmModulo.qrItensVALOR_TOTAL.Value - lNovoTotal);
+    frmModulo.qrItensVALOR_DESCONTO.Value := frmModulo.qrItensVALOR_UNITARIO.Value - ed_unitario.Value;
+    frmModulo.qrItensVALOR_UNITARIO.Value := ed_unitario.Value;
+    frmModulo.qrItensVALOR_TOTAL.Value := lNovoTotal;
+    ///
+    if not lModoEdicaoAtivo then
+      frmModulo.qrItens.Post;
+    Close;
+  end
+  else
+    Application.MessageBox(PWideChar('Novo valor unitário deve ser menor que valor atual'),'Atenção!',MB_ICONINFORMATION);
+end;
+
+procedure TfrmAlterarValorUnitario.FormCreate(Sender: TObject);
+begin
+//qrItensVALOR_UNITARIO: TFloatField;
+//    qrItensVALOR_SUBTOTAL: TFloatField;
+//    qrItensVALOR_DESCONTO: TFloatField;
+//    qrItensVALOR_ACRESCIMO: TFloatField;
+//    qrItensVALOR_TOTAL: TFloatField;
+  ed_unitario.Value := frmModulo.qrItensVALOR_UNITARIO.Value;
+end;
+
+end.

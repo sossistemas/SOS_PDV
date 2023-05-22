@@ -1,0 +1,186 @@
+unit uAlterarValor;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SOSSolution.Controls, AdvGlowButton, Vcl.StdCtrls, Vcl.Mask, RzEdit, RzLabel, Data.DB, MemDS,
+  DBAccess, Uni;
+
+type
+  TAcao =
+  (aValorUnitario
+  ,aQuantidadeVenda);
+
+  TfrmAlterarValorUnitario = class(TForm)
+    lblNomeCampo: TRzLabel;
+    edtEntrada: TRzNumericEdit;
+    bgravar: TAdvGlowButton;
+    bcancelar: TAdvGlowButton;
+    RoundShape1: TRoundShape;
+    RoundShape2: TRoundShape;
+    RoundShape3: TRoundShape;
+    procedure FormCreate(Sender: TObject);
+    procedure bgravarClick(Sender: TObject);
+    procedure edtEntradaEnter(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    FAcao: TAcao;
+  public
+    constructor Create(AOwner: TComponent; Acao: TAcao); overload;
+  end;
+
+var
+  frmAlterarValorUnitario: TfrmAlterarValorUnitario;
+
+implementation
+
+uses
+  venda, modulo, Math;
+
+{$R *.dfm}
+
+//frmModulo.qrItens
+
+procedure MakeRounded(Control: TWinControl);
+var
+  R: TRect;
+  Rgn: HRGN;
+begin
+  with Control do
+  begin
+    R := ClientRect;
+    rgn := CreateRoundRectRgn(R.Left, R.Top, R.Right, R.Bottom, 20, 20);
+    Perform(EM_GETRECT, 0, lParam(@r));
+    InflateRect(r, - 5, - 5);
+    Perform(EM_SETRECTNP, 0, lParam(@r));
+    SetWindowRgn(Handle, rgn, True);
+    Invalidate;
+  end;
+end;
+
+procedure TfrmAlterarValorUnitario.bgravarClick(Sender: TObject);
+var
+ lNovoTotal,
+ lCustoVariavel: Double;
+ lModoEdicaoAtivo: Boolean;
+ ///
+ function CreateQuery: TUniQuery;
+ begin
+   try
+     Result := TUniQuery.Create(Self);
+     Result.Connection := frmModulo.conexao;
+     Result.Close;
+     Result.SQL.Clear;
+     Result.SQL.Text := 'SELECT * FROM CUPOM_ITEM_TEMP WHERE CODIGO = ' + QuotedStr(frmModulo.qrItensCODIGO.Value);
+     Result.Open;
+     if Result.RecordCount = 0 then
+       Abort;
+     Result.Edit;
+   except
+     Abort;
+   end;
+ end;
+begin
+  with CreateQuery, frmModulo do
+  begin
+    if FAcao = aValorUnitario then
+    begin
+      if edtEntrada.Value <= 0 then
+        Application.MessageBox(PWideChar('Não é permitido venda sem valor unitário!'),'Atenção!',MB_ICONINFORMATION)
+      else
+      begin
+        lModoEdicaoAtivo := qrItens.state = dsEdit;
+        if not lModoEdicaoAtivo then
+          qrItens.Edit;
+        ///
+        lCustoVariavel := RoundTo((qrItensVALOR_UNITARIO.Value - edtEntrada.Value) * qrItensQTDE.Value , -2);
+        lNovoTotal := RoundTo(qrItensVALOR_UNITARIO.Value * qrItensQTDE.Value - lCustoVariavel , -2);
+        rTotal_Venda := rTotal_Venda - (qrItensVALOR_TOTAL.Value - lNovoTotal);
+        ///
+        if lCustoVariavel > 0 then
+        begin
+          rTotal_Desconto := rTotal_Desconto - (qrItensVALOR_DESCONTO.Value - lCustoVariavel);
+          qrItensVALOR_DESCONTO.Value := lCustoVariavel;
+          if qrItensVALOR_ACRESCIMO.Value > 0 then
+          begin
+            rTotal_Acrescimo := rTotal_Acrescimo - qrItensVALOR_ACRESCIMO.Value;
+            qrItensVALOR_ACRESCIMO.Value := 0;
+          end;
+
+        end
+        else
+        begin
+          lCustoVariavel := Abs(lCustoVariavel);
+          rTotal_Acrescimo := rTotal_Acrescimo - (qrItensVALOR_ACRESCIMO.Value - lCustoVariavel);
+          qrItensVALOR_ACRESCIMO.Value := Abs(lCustoVariavel);
+          if qrItensVALOR_DESCONTO.Value > 0 then
+          begin
+            rTotal_Desconto := rTotal_Desconto - qrItensVALOR_DESCONTO.Value;
+            qrItensVALOR_DESCONTO.Value := 0;
+          end;
+        end;
+        ///
+        qrItensVALOR_TOTAL.Value := lNovoTotal;
+        ///
+
+        FieldByName('valor_desconto').AsFloat := qrItensVALOR_DESCONTO.Value;
+        FieldByName('valor_acrescimo').AsFloat := qrItensVALOR_ACRESCIMO.Value;
+        FieldByName('valor_total').AsFloat := lNovoTotal;
+        Post;
+        ///
+        if not lModoEdicaoAtivo then
+          qrItens.Post;
+        Self.Close;
+      end;
+    end
+    else
+    begin
+
+    end;
+
+  end;
+end;
+
+constructor TfrmAlterarValorUnitario.Create(AOwner: TComponent; Acao: TAcao);
+begin
+  FAcao := Acao;
+  inherited Create(AOwner);
+end;
+
+procedure TfrmAlterarValorUnitario.edtEntradaEnter(Sender: TObject);
+begin
+  edtEntrada.DisplayFormat := '###,###,##0.000';
+  edtEntrada.SelectAll;
+end;
+
+procedure TfrmAlterarValorUnitario.FormCreate(Sender: TObject);
+begin
+  if FAcao = aValorUnitario then
+  begin
+    lblNomeCampo.Caption := 'Valor Unitário';
+    edtEntrada.DisplayFormat := 'R$ ###,###,##0.000';
+  end
+  else
+  begin
+    lblNomeCampo.Caption := 'Quantidade';
+    edtEntrada.DisplayFormat := '###,###,##0.000';
+  end;
+
+  edtEntrada.Value := frmModulo.qrItensVALOR_UNITARIO.Value;
+  MakeRounded(bgravar);
+  MakeRounded(bcancelar);
+  MakeRounded(Self);
+end;
+
+procedure TfrmAlterarValorUnitario.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    bgravarClick(nil)
+  else
+  if Key = VK_ESCAPE then
+    Close;
+end;
+
+end.
