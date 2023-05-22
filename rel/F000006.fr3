@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<TfrxReport Version="5.3.16" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Padrão" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="43076,8786211111" ReportOptions.Description.Text="" ReportOptions.LastChange="43371,5264597801" ScriptLanguage="PascalScript" ScriptText.Text="procedure Page1OnBeforePrint(Sender: TfrxComponent);&#13;&#10;begin&#13;&#10;  if &#60;frxComanda.&#34;SENHA&#34;&#62; &#62; 0 then&#13;&#10;    cpSenha.Visible := True&#13;&#10;  else                  &#13;&#10;    cpSenha.Visible := False;&#13;&#10;  if trim(&#60;frObs.&#34;OBS&#34;&#62;) &#60;&#62; '' then begin             &#13;&#10;    cpO1.Visible := True;  &#13;&#10;    cpO2.Visible := True;  &#13;&#10;  end else begin                               &#13;&#10;    cpO1.Visible := False;&#13;&#10;    cpO2.Visible := False;&#13;&#10;  end;  &#13;&#10;end;&#13;&#10;  &#13;&#10;begin&#13;&#10;&#13;&#10;end.">
+  <Datasets>
+    <item DataSet="frFilial" DataSetName="frFilial"/>
+    <item DataSet="frOBS" DataSetName="frObs"/>
+    <item DataSet="frxComanda" DataSetName="frxComanda"/>
+  </Datasets>
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" PaperWidth="80" PaperHeight="100000" PaperSize="256" LeftMargin="5" RightMargin="5" TopMargin="10" BottomMargin="10" ColumnWidth="0" ColumnPositions.Text="" EndlessHeight="True" HGuides.Text="" VGuides.Text="" OnBeforePrint="Page1OnBeforePrint">
+    <TfrxReportTitle Name="ReportTitle1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="18,89765" Left="0" Top="18,89765" Width="264,5671" AllowSplit="True">
+      <TfrxMemoView Name="Memo12" Align="baClient" Left="0" Top="0" Width="264,5671" Height="18,89765" StretchMode="smActualHeight" AutoWidth="True" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="5" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;FILIAL&#34;]"/>
+    </TfrxReportTitle>
+    <TfrxPageHeader Name="PageHeader1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="128,04729291" Left="0" Top="60,47248" Width="264,5671">
+      <TfrxMemoView Name="Memo5" Align="baLeft" Left="0" Top="62,44094" Width="132,28355" Height="26,45669291" Font.Charset="1" Font.Color="-16777208" Font.Height="-24" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[frxComanda.&#34;DATA&#34;]"/>
+      <TfrxMemoView Name="Memo6" Align="baRight" Left="143,62214" Top="62,44094" Width="120,94496" Height="26,45669291" Font.Charset="1" Font.Color="-16777208" Font.Height="-24" Font.Name="Arial" Font.Style="1" HAlign="haRight" ParentFont="False" Text="[frxComanda.&#34;HORA&#34;]"/>
+      <TfrxLineView Name="Line2" Align="baWidth" Left="0" Top="100,14966" Width="264,5671" Height="0" Color="0" Frame.Typ="4"/>
+      <TfrxMemoView Name="Memo7" Align="baLeft" Left="0" Top="45" Width="128,50402" Height="15,11811024" Font.Charset="1" Font.Color="-16777208" Font.Height="-11" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="Data"/>
+      <TfrxMemoView Name="Memo8" Align="baRight" Left="158,74026" Top="45" Width="105,82684" Height="15,11811024" Font.Charset="1" Font.Color="-16777208" Font.Height="-11" Font.Name="Arial" Font.Style="0" HAlign="haRight" ParentFont="False" Text="Hora"/>
+      <TfrxMemoView Name="Memo11" Align="baWidth" Left="0" Top="104,3859" Width="264,5671" Height="22,67718" Font.Charset="1" Font.Color="-16777208" Font.Height="-19" Font.Name="Arial" Font.Style="5" HAlign="haCenter" ParentFont="False" Text="ITENS DO PEDIDO"/>
+      <TfrxMemoView Name="cpSenha" Align="baWidth" Left="0" Top="0" Width="264,5671" Height="41,57483" Font.Charset="1" Font.Color="-16777208" Font.Height="-37" Font.Name="Arial" Font.Style="1" HAlign="haRight" ParentFont="False" Text="Senha: [frxComanda.&#34;SENHA&#34;]"/>
+    </TfrxPageHeader>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="45,35436" Left="0" Top="249,44898" Width="264,5671" ColumnWidth="0" ColumnGap="0" DataSet="frxComanda" DataSetName="frxComanda" RowCount="0" Stretched="True">
+      <TfrxMemoView Name="Memo1" Align="baLeft" Left="0" Top="1,77953000000002" Width="52,91342" Height="18,89765" Font.Charset="1" Font.Color="-16777208" Font.Height="-15" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[frxComanda.&#34;QTDE&#34;]  X"/>
+      <TfrxMemoView Name="Memo2" Align="baWidth" Left="52,91342" Top="1,77952999999997" Width="211,65368" Height="18,89765" Font.Charset="1" Font.Color="-16777208" Font.Height="-15" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[frxComanda.&#34;NOME&#34;]"/>
+      <TfrxMemoView Name="Memo3" Align="baRight" Left="11,33859" Top="23,7953" Width="253,22851" Height="18,89765" StretchMode="smMaxHeight" AutoWidth="True" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="[frxComanda.&#34;EXTRA&#34;]"/>
+    </TfrxMasterData>
+    <TfrxMasterData Name="cpO2" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="22,67718" Left="0" Top="362,83488" Width="264,5671" ColumnWidth="0" ColumnGap="0" DataSet="frOBS" DataSetName="frObs" RowCount="0" Stretched="True">
+      <TfrxMemoView Name="Memo38" Align="baWidth" Left="0" Top="3,77953000000002" Width="264,5671" Height="18,89765" StretchMode="smActualHeight" DataField="obs" DataSet="frOBS" DataSetName="frObs" Text="[frObs.&#34;obs&#34;]"/>
+    </TfrxMasterData>
+    <TfrxGroupHeader Name="cpO1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="22,67718" Left="0" Top="317,48052" Width="264,5671" Condition="1=1">
+      <TfrxMemoView Name="Memo39" Left="2,77953" Top="0" Width="94,48825" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Observação:"/>
+      <TfrxLineView Name="Line3" Align="baWidth" Left="0" Top="0" Width="264,5671" Height="0" Color="0" Frame.Typ="4"/>
+    </TfrxGroupHeader>
+  </TfrxReportPage>
+</TfrxReport>

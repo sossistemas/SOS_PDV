@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<TfrxReport Tag="1" Version="5.3.16" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Microsoft Print to PDF" PrintOptions.PrintOnSheet="0" PrintOptions.ShowDialog="False" ReportOptions.CreateDate="40401,475989294" ReportOptions.Description.Text="" ReportOptions.LastChange="43343,0003076968" ScriptLanguage="PascalScript" ScriptText.Text="begin&#13;&#10;end." OnReportPrint="frxReportOnReportPrint">
+  <Datasets>
+    <item DataSet="frCupomNF" DataSetName="frCupomNF"/>
+    <item DataSet="frFilial" DataSetName="frFilial"/>
+  </Datasets>
+  <Variables>
+    <item Name=" User"/>
+    <item Name="LinhasImpressas"/>
+  </Variables>
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" PaperWidth="72" PaperHeight="1000" PaperSize="256" LeftMargin="0" RightMargin="0" TopMargin="0,5" BottomMargin="0" ColumnWidth="0" ColumnPositions.Text="" EndlessHeight="True" LargeDesignHeight="True" PrintIfEmpty="False" HGuides.Text="" VGuides.Text="" OnBeforePrint="Page1OnBeforePrint">
+    <TfrxReportTitle Name="cpTitulo" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="200,31509" Left="0" Top="18,89765" Width="272,12616" OnBeforePrint="ReportTitle1OnBeforePrint" PrintChildIfInvisible="True" Stretched="True">
+      <TfrxMemoView Name="lbDataHora" Align="baWidth" Left="0" Top="42,69295" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="Data: [frCupomNF.&#34;DATA&#34;] Hora: [frCupomNF.&#34;HORA&#34;]"/>
+      <TfrxMemoView Name="lbEmpresa" Align="baWidth" Left="0" Top="4,77953" Width="272,12616" Height="18,89765" StretchMode="smActualHeight" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;FILIAL&#34;]"/>
+      <TfrxLineView Name="Line1" Align="baWidth" Left="0" Top="40,57483" Width="272,12616" Height="0" Color="0" Frame.Style="fsDot" Frame.Typ="4"/>
+      <TfrxMemoView Name="lbNCupum" Align="baWidth" Left="0" Top="61,51979" Width="272,12616" Height="15,11812" StretchMode="smActualHeight" AutoWidth="True" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="CUPOM : [frCupomNF.&#34;NUMERO&#34;]"/>
+      <TfrxLineView Name="Line2" Align="baWidth" ShiftMode="smWhenOverlapped" Left="0" Top="82,04731" Width="272,12616" Height="0" Color="0" Frame.Style="fsDot" Frame.Typ="4"/>
+      <TfrxLineView Name="Line3" Align="baWidth" Left="0" Top="2,77953" Width="272,12616" Height="0" Color="0" Frame.Style="fsDot" Frame.Typ="4"/>
+      <TfrxMemoView Name="lbTel" Align="baWidth" Left="0" Top="24,01577" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;TELEFONE&#34;]">
+        <Formats>
+          <item/>
+          <item/>
+          <item/>
+        </Formats>
+      </TfrxMemoView>
+      <TfrxMemoView Name="lbProduto" Align="baWidth" Left="0" Top="99,48825" Width="272,12616" Height="30,23624" StretchMode="smActualHeight" Font.Charset="1" Font.Color="-16777208" Font.Height="-24" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="[frCupomNF.&#34;NOME&#34;]"/>
+      <TfrxMemoView Name="lbPreco" Align="baRight" Left="90,70872" Top="137,28355" Width="181,41744" Height="30,23624" DisplayFormat.FormatStr="%2.2m" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="-16777208" Font.Height="-29" Font.Name="Arial" Font.Style="1" HAlign="haRight" ParentFont="False" Text="[frCupomNF.&#34;ITEM_UNITARIO&#34;]"/>
+      <TfrxLineView Name="Line4" Align="baWidth" Left="0" Top="177,63791" Width="272,12616" Height="0" Color="0" Frame.Style="fsDot" Frame.Typ="4"/>
+      <TfrxMemoView Name="lbValidador" Align="baWidth" Left="0" Top="179,85838" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="-16777208" Font.Height="-9" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text=""/>
+    </TfrxReportTitle>
+  </TfrxReportPage>
+</TfrxReport>

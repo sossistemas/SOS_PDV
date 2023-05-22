@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<TfrxReport Tag="1" Version="5.3.16" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Microsoft Print to PDF" PrintOptions.PrintOnSheet="0" PrintOptions.ShowDialog="False" ReportOptions.CreateDate="40401,475989294" ReportOptions.Description.Text="" ReportOptions.LastChange="43462,4811975694" ScriptLanguage="PascalScript" ScriptText.Text="begin&#13;&#10;end." OnReportPrint="frxReportOnReportPrint">
+  <Datasets>
+    <item DataSet="frCredito" DataSetName="frCredito"/>
+    <item DataSet="frFilial" DataSetName="frFilial"/>
+  </Datasets>
+  <Variables>
+    <item Name=" User"/>
+    <item Name="LinhasImpressas"/>
+  </Variables>
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" PaperWidth="72" PaperHeight="100000" PaperSize="256" LeftMargin="0" RightMargin="0" TopMargin="0,5" BottomMargin="0" ColumnWidth="0" ColumnPositions.Text="" EndlessHeight="True" LargeDesignHeight="True" PrintIfEmpty="False" HGuides.Text="" VGuides.Text="" OnBeforePrint="Page1OnBeforePrint">
+    <TfrxReportTitle Name="cpTitulo" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="317,48052" Left="0" Top="18,89765" Width="272,12616" OnBeforePrint="ReportTitle1OnBeforePrint" PrintChildIfInvisible="True" Stretched="True">
+      <TfrxMemoView Name="Memo1" Align="baWidth" Left="0" Top="93,26778" Width="272,12616" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="CUPOM DE CRÉDITO"/>
+      <TfrxMemoView Name="lbDataHora" Align="baWidth" Left="0" Top="112,72449" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="Data: [frCredito.&#34;DATA&#34;] Hora: [frCredito.&#34;HORA&#34;]">
+        <Formats>
+          <item/>
+          <item/>
+        </Formats>
+      </TfrxMemoView>
+      <TfrxMemoView Name="lbEmpresa" Align="baWidth" Left="0" Top="4,77953" Width="272,12616" Height="18,89765" StretchMode="smActualHeight" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;FILIAL&#34;]"/>
+      <TfrxMemoView Name="lbDocEmpresa" Align="baWidth" Left="0" Top="23,67718" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;CNPJ&#34;]"/>
+      <TfrxLineView Name="Line1" Align="baWidth" Left="0" Top="89,70872" Width="272,12616" Height="0" Color="0" Frame.Style="fsDot" Frame.Typ="4"/>
+      <TfrxMemoView Name="Memo5" Left="1,33859" Top="129,55133" Width="64,25201" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="CUPOM"/>
+      <TfrxMemoView Name="Memo7" Left="1,33859" Top="146,75603" Width="64,25201" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="CLIENTE"/>
+      <TfrxLineView Name="Line2" Align="baWidth" Left="0" Top="315,93723" Width="272,12616" Height="0" Color="0" Frame.Style="fsDot" Frame.Typ="4"/>
+      <TfrxMemoView Name="Memo11" Left="68,04731" Top="146,75603" Width="7,55906" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" ParentFont="False" Text=":"/>
+      <TfrxMemoView Name="lbCliente" Left="78,37013" Top="146,75603" Width="192,75603" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" ParentFont="False" WordWrap="False" Text="[frCredito.&#34;NOME&#34;]"/>
+      <TfrxMemoView Name="Memo28" Left="68,04731" Top="129,55133" Width="7,55906" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" ParentFont="False" Text=":"/>
+      <TfrxMemoView Name="frxMemoView1" Left="78,37013" Top="129,55133" Width="192,75603" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="[frCredito.&#34;CUPOM_DEVOLUCAO&#34;]"/>
+      <TfrxLineView Name="Line3" Align="baWidth" Left="0" Top="2,77953" Width="272,12616" Height="0" Color="0" Frame.Style="fsDot" Frame.Typ="4"/>
+      <TfrxMemoView Name="Memo2" Align="baWidth" Left="0" Top="39,35436" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;ENDERECO&#34;]"/>
+      <TfrxMemoView Name="Memo3" Align="baWidth" Left="0" Top="54,91342" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;CIDADE&#34;]/[frFilial.&#34;UF&#34;] - [frFilial.&#34;CEP&#34;]"/>
+      <TfrxMemoView Name="Memo4" Align="baWidth" Left="0" Top="70,37013" Width="272,12616" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" HAlign="haCenter" ParentFont="False" Text="[frFilial.&#34;TELEFONE&#34;]">
+        <Formats>
+          <item/>
+          <item/>
+          <item/>
+        </Formats>
+      </TfrxMemoView>
+      <TfrxMemoView Name="Memo6" Align="baWidth" Left="0" Top="192,75603" Width="272,12616" Height="26,45671" DisplayFormat.FormatStr="%2.2m" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-21" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" WordWrap="False" Text="[frCredito.&#34;VALOR&#34;]"/>
+      <TfrxMemoView Name="Memo8" Align="baWidth" Left="0" Top="173,85838" Width="272,12616" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="Valor do Crédito"/>
+      <TfrxMemoView Name="Memo9" Align="baWidth" Left="0" Top="222,99227" Width="272,12616" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="Vencimento: [frCredito.&#34;VENCIMENTO&#34;]"/>
+      <TfrxBarCodeView Name="BarCode1" Align="baCenter" Left="102,06308" Top="249,44898" Width="68" Height="49,13389" BarType="bcCode128" Expression="&#60;frCredito.&#34;CUPOM_DEVOLUCAO&#34;&#62;" Rotation="0" Text="900390" WideBarRatio="2" Zoom="1" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0"/>
+    </TfrxReportTitle>
+  </TfrxReportPage>
+</TfrxReport>
