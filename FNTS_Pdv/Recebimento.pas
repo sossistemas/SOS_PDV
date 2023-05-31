@@ -117,7 +117,7 @@ type
     NovoDesconto: Double;
   end;
 
-function EfetuaRecebimento(ValorTotal, ValorCouvert, ValorGarcom, ValorDesconto, ValorAcrescimo: Double): TRecebimento;
+function EfetuaRecebimento(ValorTotal, ValorCouvert, ValorGarcom, ValorDesconto, ValorAcrescimo : Double; ValorRecebidoTEF : Double = 0): TRecebimento;
 
 var
   frmRecebimento: TfrmRecebimento;
@@ -130,13 +130,13 @@ uses
 
 {$R *.dfm}
 
-function EfetuaRecebimento(ValorTotal, ValorCouvert, ValorGarcom, ValorDesconto, ValorAcrescimo: Double): TRecebimento;
+function EfetuaRecebimento(ValorTotal, ValorCouvert, ValorGarcom, ValorDesconto, ValorAcrescimo : Double; ValorRecebidoTEF : Double): TRecebimento;
 begin
   Application.CreateForm(TfrmRecebimento, frmRecebimento);
   Try
     with frmRecebimento do
     begin
-      TotalReceber := ValorTotal;
+      TotalReceber := ValorTotal - ValorRecebidoTEF;
       Continua := False;
       if ValorCouvert > 0 then begin
         lCouvert.Visible := True;
@@ -148,26 +148,33 @@ begin
         vGarcom.Visible := True;
         vGarcom.Caption := 'R$ ' + FormatFloat('#,##0.00', ValorGarcom);
       end;
-      pnTotal.Caption := 'R$ ' + FormatFloat('#,##0.00', ValorTotal);
-      pnSaldo.Caption := 'R$ ' + FormatFloat('#,##0.00', ValorTotal);
-      pnDesconto.Caption := 'R$ ' + FormatFloat('#,##0.00', 0);
+
+      pnTotal.Caption     := 'R$ ' + FormatFloat('#,##0.00', ValorTotal);
+      pnSaldo.Caption     := 'R$ ' + FormatFloat('#,##0.00', ValorTotal - ValorRecebidoTEF);
+      pnDesconto.Caption  := 'R$ ' + FormatFloat('#,##0.00', 0);
       pnAcrescimo.Caption := 'R$ ' + FormatFloat('#,##0.00', ValorAcrescimo);
-      Acrescimo := ValorAcrescimo;
-      Desconto := ValorDesconto;
-      NovoDesconto := 0;
+      pnRecebido.Caption  := 'R$ ' + FormatFloat('#,##0.00', ValorRecebidoTEF);
+      pnTEF.Caption       := 'R$ ' + FormatFloat('#,##0.00', ValorRecebidoTEF);
+
+      Acrescimo     := ValorAcrescimo;
+      Desconto      := ValorDesconto;
+      NovoDesconto  := 0;
       NovoAcrescimo := 0;
-      Saldo := ValorTotal;
+
+      Saldo := ValorTotal - ValorRecebidoTEF;
+
       if (LancaRecebimento.ValorDesconto > 0) then
         LancaAutomatico('D',LancaRecebimento.ValorDesconto);
       if (LancaRecebimento.ValorAcressimo > 0) then
         LancaAutomatico('A',LancaRecebimento.ValorAcressimo);
+
       ShowModal;
-      Result.Confirma := Continua;
-      Result.Troco := Troco;
+      Result.Confirma                := Continua;
+      Result.Troco                   := Troco;
       Result.CancelaImpressaoCozinha := edCancelaImpressaoCozinha.Checked;
-      Result.ValorPago := Recebido;
-      Result.Desconto := NovoDesconto;
-      Result.Acrescimo := NovoAcrescimo;
+      Result.ValorPago               := Recebido;
+      Result.Desconto                := NovoDesconto;
+      Result.Acrescimo               := NovoAcrescimo;
     end;
   Finally
     FreeAndNil(frmRecebimento);
@@ -177,7 +184,8 @@ end;
 
 procedure TfrmRecebimento.Action10Execute(Sender: TObject);
 begin
-  if Saldo > 0 then begin
+  if Saldo > 0 then
+  begin
     Application.MessageBox('Existe saldo a receber!', 'Atenção!', MB_ICONINFORMATION);
     Exit;
   end;
@@ -236,6 +244,7 @@ begin
         cdsRecebimentoCupomCreditoCupom.AsString := RecebeCupomCredito.Cupom;
         cdsRecebimentoCupomCreditoValor.AsFloat := RecebeCupomCredito.Valor;
       end;
+      cdsRecebimentoRecTEF.Value := False;
       cdsRecebimento.Post;
     end;
   end;
@@ -277,10 +286,11 @@ begin
       bCadastra_Crediario := True;
       rvalor_total_crediario := Valor.Valor;
       cdsRecebimento.Append;
-      cdsRecebimentoTipo.AsString := StRecCrediario;
-      cdsRecebimentovalor.AsFloat := Valor.Valor;
-      cdsRecebimentocliente.AsString := sCli_codigo;
+      cdsRecebimentoTipo.AsString      := StRecCrediario;
+      cdsRecebimentovalor.AsFloat      := Valor.Valor;
+      cdsRecebimentocliente.AsString   := sCli_codigo;
       cdsRecebimentoParcelas.AsInteger := iCrediario_prestacao;
+      cdsRecebimentoRecTEF.Value       := False;
       cdsRecebimento.Post;
     end;
     RecCrediario := Roundto(RecCrediario + Valor.Valor, -2);
@@ -331,6 +341,7 @@ begin
       cdsRecebimentovalor.AsFloat := Valor.Valor;
       cdsRecebimentocliente.AsString := sCli_codigo;
       cdsRecebimentoParcelas.AsInteger := 1;
+      cdsRecebimentoRecTEF.Value       := False;
       cdsRecebimento.Post;
       RecConvenio := Roundto(RecConvenio + Valor.Valor, -2);
       Saldo := Roundto(Saldo - Valor.Valor, -2);
@@ -373,6 +384,7 @@ begin
         cdsRecebimentoBanco.AsInteger := Banceira.Numero;
         cdsRecebimentobandeira.AsString := BandeiraCartaoToDescStr(Banceira.Bandeira);
         cdsRecebimentovalor.AsFloat := Valor.Valor;
+        cdsRecebimentoRecTEF.Value       := False;
         cdsRecebimento.Post;
       end;
       RecCartaoCR := Roundto(RecCartaoCR + Valor.Valor, -2);
@@ -415,6 +427,7 @@ begin
         cdsRecebimentoBanco.AsInteger := Banceira.Numero;
         cdsRecebimentobandeira.AsString := BandeiraCartaoToDescStr(Banceira.Bandeira);
         cdsRecebimentovalor.AsFloat := Valor.Valor;
+        cdsRecebimentoRecTEF.Value       := False;
         cdsRecebimento.Post;
       end;
       RecCartaoDE := Roundto(RecCartaoDE + Valor.Valor, -2);
@@ -498,6 +511,7 @@ begin
                 cdsRecebimentocod_adm_sat.AsString := Banceira.cod_adm_sat;
                 cdsRecebimentoRec1.AsString:=Ret.Rec1;
                 cdsRecebimentoRec2.AsString:=Ret.Rec2;
+                cdsRecebimentoRecTEF.Value := True;
                 cdsRecebimento.Post;
                 podefinalizar:=true;
               end;
@@ -513,6 +527,7 @@ begin
               cdsRecebimentobandeira.AsString := BandeiraCartaoToDescStr(Banceira.Bandeira);
               cdsRecebimentotef_codigo_autorizacao.AsString := '';
               cdsRecebimentocod_adm_sat.AsString := Banceira.cod_adm_sat;
+              cdsRecebimentoRecTEF.Value := True;
               cdsRecebimento.Post;
               podefinalizar:=true;
             end;
@@ -531,6 +546,8 @@ begin
       RecTEF := Roundto(RecTEF + Valor.Valor, -2);
       Saldo := Roundto(Saldo - Valor.Valor, -2);
       Recebido := Recebido + Valor.Valor;
+
+      frmVenda.PRecTEF := RecTEF;
 
       if Saldo < 0 then
       begin
@@ -620,17 +637,28 @@ end;
 
 procedure TfrmRecebimento.FormCreate(Sender: TObject);
 begin
-  RecDinheiro := 0;
+  RecDinheiro  := 0;
   RecCrediario := 0;
-  RecConvenio := 0;
-  RecCartaoCR := 0;
-  RecCartaoDE := 0;
-  RecCheque := 0;
-  RecTEF := 0;
-  Desconto := 0;
-  Acrescimo := 0;
-  Recebido := 0;
-  Troco := 0;
+  RecConvenio  := 0;
+  RecCartaoCR  := 0;
+  RecCartaoDE  := 0;
+  RecCheque    := 0;
+
+  if not (frmVenda.PRecTEF > 0) then
+  begin
+    RecTEF   := 0;
+    Recebido := 0;
+  end
+  else
+  begin
+    RecTEF   := frmVenda.PRecTEF;
+    Recebido := RecTEF;
+  end;
+
+  Desconto     := 0;
+  Acrescimo    := 0;
+
+  Troco        := 0;
   TotalReceber := 0;
 
   frmModulo.qrConfigPDV.Close;
@@ -642,6 +670,7 @@ begin
   edCancelaImpressaoCozinha.Visible := bImpressaoCozinha;
   Action7.Enabled := TEF_Ativo;
 end;
+
 
 procedure TfrmRecebimento.LancaAutomatico(Tipo: string; Valor: Double);
 var

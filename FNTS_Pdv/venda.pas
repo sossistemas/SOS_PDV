@@ -466,6 +466,7 @@ type
     Label23: TLabel;
     cdsRecebimentoRec1: TStringField;
     cdsRecebimentoRec2: TStringField;
+    cdsRecebimentoRecTEF: TBooleanField;
     procedure Cancela_cupom_aberto();
     procedure Cancela_Item(sItem: string; Acao: string);
     procedure Registra_Item();
@@ -564,6 +565,7 @@ type
     Touch_Colunas, Touch_Linhas, Touch_linhas_Grupo, Touch_Altura_Grupo: Integer;
     bVerificaIniternet, bFezDevolucao: Boolean;
     FNroCupom: string;
+    FPRecTEF: Double;
 
     procedure LancaMesaComanda(MesasComandas: string);
 
@@ -593,6 +595,8 @@ type
 
     procedure ChecagemCupomAberto;
 
+    procedure VerificarRecebimentoTef;
+
 
     function ImgTipoImpressora(i: Integer): TImpressora;
     function RetornaSenhaImpressao: Integer;
@@ -615,6 +619,9 @@ type
     function EnviaSAT(Cupom: string): TSat;
     procedure PrepararImpressao;
     function TemDevolucao: Boolean;
+
+
+    property PRecTEF: Double read FPRecTEF write FPRecTEF;
     var
       vr_saldo, vr_recebido, vr_total: string;
       IndiceTransacaoTef: Integer;
@@ -1136,7 +1143,8 @@ begin
       InfAdic.infCpl := cMsg;
 
       ACBrSAT1.EnviarDadosVenda; //(mSalvaXML.Lines.Text);
-      if ACBrSAT1.Resposta.codigoDeRetorno = 6000 then begin
+      if ACBrSAT1.Resposta.codigoDeRetorno = 6000 then
+      begin
         PrepararImpressao;
         ACBrSAT1.ImprimirExtrato;
         if (TEF_Ativo) and (RecebeuTEF) then
@@ -1907,7 +1915,19 @@ procedure TfrmVenda.Cancela_Item(sItem: string; Acao: string);
 begin
   Application.ProcessMessages;
   query.SQL.Clear;
-  if Acao = 'C' then begin
+  if Acao = 'C' then
+  begin
+    if FPRecTEF > 0 then
+    begin
+      if ((rTotal_Venda - frmModulo.qrItensVALOR_TOTAL.AsFloat) < FPRecTEF) then
+      begin
+        Application.MessageBox('Não é possível excluir o Item selecionado.' +#13 +
+                               'Recebimento via TEF já realizado.' + #13 +
+                               'Finalize o Cupom.','ATENÇÃO',MB_ICONWARNING);
+        Exit;
+      end
+    end;
+
     Dec(iTotal_Itens);
     rTotal_Venda := rTotal_Venda - frmModulo.qrItensVALOR_TOTAL.AsFloat;
     query.SQL.Add('update CUPOM_ITEM_TEMP set cancelado = 1 where item = ' + IntToStr(StrToInt(sItem)));
@@ -2431,9 +2451,13 @@ begin
   Imprime_display('C A I X A    L I V R E', clWhite, tiLivre);
   MostraFotoProduto(False);
   MostraLogoMarca(True);
+  FPRecTEF := 0;
+
   if not AtivaTouch then
+  begin
     if ed_barra.Enabled then
       ed_barra.setfocus;
+  end;
 end;
 
 // -------------------------------------------------------------------------- //
@@ -2894,6 +2918,31 @@ begin
   end
   else
     result := valor;
+end;
+
+procedure TfrmVenda.VerificarRecebimentoTef;
+begin
+  if not(FPRecTEF > 0) then
+  begin
+    If Application.FindComponent('cdsRecebimento') = nil then
+    begin
+      cdsRecebimento.Close;
+      cdsRecebimento.CreateDataSet;
+      cdsRecebimento.Open;
+    end;
+  end
+  else
+  begin
+    cdsRecebimento.First;
+
+    while not cdsRecebimento.Eof do
+    begin
+      if cdsRecebimentoRecTEF.Value = False then
+        cdsRecebimento.Delete;
+
+      cdsRecebimento.Next;
+    end;
+  end;
 end;
 
 procedure TfrmVenda.ChecagemCupomAberto;
@@ -3372,37 +3421,46 @@ end;
 
 procedure TfrmVenda.CancelarItem1Click(Sender: TObject);
 begin
-  if bVenda then begin
-    if iTotal_Itens > 0 then begin
-      if SolicitaLiberacaoCancelarGerencial then begin
+  if bVenda then
+  begin
+    if iTotal_Itens > 0 then
+    begin
+      if SolicitaLiberacaoCancelarGerencial then
+      begin
         if not AutorizaGerencial(taCancItem) then
           Exit;
-      end else if bSenha_Cancel_Cupom then begin
+      end else if bSenha_Cancel_Cupom then
+      begin
         frmsenha_supervisor := tfrmsenha_supervisor.create(self);
         frmsenha_supervisor.CancelarItem := True;
         frmsenha_supervisor.showmodal;
         if not bSupervisor_autenticado then
           Exit;
       end;
-      if TipoDeCupom = tcPafECF then begin
-        if frmModulo.qrItensCANCELADO.AsInteger = 1 then begin
+      if TipoDeCupom = tcPafECF then
+      begin
+        if frmModulo.qrItensCANCELADO.AsInteger = 1 then
+        begin
           Imprime_display('O ITEM SELICIONADO JA ESTA CANCELADO!', clRed, tiErro);
         end else
           Cancela_Item(Zerar(frmModulo.qrItensITEM.AsString, 3), 'C');
-      end else begin
+      end else
+      begin
         if btnCancelaItem.Caption = 'Descancelar Item' then
           Cancela_Item(Zerar(frmModulo.qrItensITEM.AsString, 3), 'D')
         else
           Cancela_Item(Zerar(frmModulo.qrItensITEM.AsString, 3), 'C');
       end;
     end
-    else begin
+    else
+    begin
       Imprime_display('NÃO EXISTEM ITENS LANÇADOS!', clRed, tiErro);
       Sleep(1000);
       Imprime_display_anterior;
     end;
   end
-  else begin
+  else
+  begin
     Imprime_display('Não existe cupom aberto para cancelar!', clRed, tiErro);
     Sleep(1000);
     Imprime_display_anterior;
@@ -3563,6 +3621,7 @@ begin
   frmModulo.qrfilial.Open;
   frmModulo.qrconfig.Close;
   frmModulo.qrconfig.Open;
+
   if bVenda then
   begin
     lbEstoque.Visible := False;
@@ -3585,8 +3644,9 @@ begin
     RecebeCupomCredito.id := -1;
     RecebeCupomCredito.Cupom := '';
     RecebeCupomCredito.Valor := 0;
-    cdsRecebimento.Close;
-    cdsRecebimento.CreateDataSet;
+
+    VerificarRecebimentoTef;
+
     rvalor_total_convenio := 0;
     rvalor_total_cheque := 0;
     rvalor_total_crediario := 0;
@@ -3605,7 +3665,7 @@ begin
     else
     begin
       AplicaDescontoPorGrupo;
-      vRecebimento := EfetuaRecebimento(rTotal_Venda, rTotal_Couvert, rTotal_Comissao, rTotal_Desconto, rTotal_Acrescimo);
+      vRecebimento := EfetuaRecebimento(rTotal_Venda, rTotal_Couvert, rTotal_Comissao, rTotal_Desconto, rTotal_Acrescimo, FPRecTEF);
     end;
     /////////////////////////////////////////////////////////////////////////////////////////
     if vRecebimento.Confirma then
@@ -6294,8 +6354,8 @@ begin
   frmMsg_Operador.Close;
   frmModulo.qrconfig.Close;
   frmModulo.qrconfig.Open;
-  Limpa_controles;
   bMudouProvisorio := False;
+
   if (TipoDeCupom <> tcSimples) then
   begin
     if frmPrincipal.LerINi(sConfiguracoes, 'PDV', 'Inicia', 'F') = 'F' then

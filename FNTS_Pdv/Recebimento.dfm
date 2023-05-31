@@ -8,6 +8,7 @@ object frmRecebimento: TfrmRecebimento
   ClientHeight = 440
   ClientWidth = 891
   Color = clBlack
+  DockSite = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

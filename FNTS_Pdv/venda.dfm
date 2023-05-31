@@ -126,8 +126,8 @@ object frmVenda: TfrmVenda
               object lb_produto: TRzLabel
                 Left = 5
                 Top = 5
-                Width = 1488
-                Height = 47
+                Width = 321
+                Height = 42
                 Align = alClient
                 Alignment = taCenter
                 Caption = 'C A I X A    L I V R E'
@@ -140,8 +140,6 @@ object frmVenda: TfrmVenda
                 Transparent = True
                 Layout = tlCenter
                 ShadowColor = clBlack
-                ExplicitWidth = 321
-                ExplicitHeight = 42
               end
             end
           end
@@ -4049,7 +4047,7 @@ object frmVenda: TfrmVenda
                 object lbTotal: TRzLabel
                   Left = 5
                   Top = 5
-                  Width = 375
+                  Width = 37
                   Height = 16
                   Align = alTop
                   Caption = 'Total:'
@@ -4060,7 +4058,6 @@ object frmVenda: TfrmVenda
                   Font.Style = [fsBold]
                   ParentFont = False
                   Transparent = True
-                  ExplicitWidth = 37
                 end
               end
               object Panel14: TPanel
@@ -4096,7 +4093,7 @@ object frmVenda: TfrmVenda
                 object RzLabel7: TRzLabel
                   Left = 5
                   Top = 5
-                  Width = 146
+                  Width = 34
                   Height = 16
                   Align = alTop
                   Caption = 'Itens'
@@ -4107,7 +4104,6 @@ object frmVenda: TfrmVenda
                   Font.Style = [fsBold]
                   ParentFont = False
                   Transparent = True
-                  ExplicitWidth = 34
                 end
               end
               object Panel15: TPanel
@@ -12378,6 +12374,9 @@ object frmVenda: TfrmVenda
     object cdsRecebimentoRec2: TStringField
       FieldName = 'Rec2'
       Size = 8196
+    end
+    object cdsRecebimentoRecTEF: TBooleanField
+      FieldName = 'RecTEF'
     end
   end
   object TimerExtra: TTimer
