@@ -2576,18 +2576,18 @@ object frmCaixa_Fechamento: TfrmCaixa_Fechamento
     PrintOptions.PrintMode = pmSplit
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42970.860474629600000000
-    ReportOptions.LastChange = 45055.537846099530000000
+    ReportOptions.LastChange = 43613.381531597200000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'procedure MasterData2OnBeforePrint(Sender: TfrxComponent);'
       'begin'
       '  if m3.text = '#39'S'#39' then begin'
       '    m1.Font.Style := fsBold;'
-      '    m4.Font.Style := fsBold;'
-      '  end else begin'
-      '    m1.Font.Style := 0;'
-      '    m4.Font.Style := 0;'
-      '  end;'
+      '    m2.Font.Style := fsBold;'
+      '  end else begin                               '
+      '    m1.Font.Style := 0;  '
+      '    m2.Font.Style := 0;'
+      '  end;                  '
       'end;'
       ''
       'begin'
@@ -2943,7 +2943,7 @@ object frmCaixa_Fechamento: TfrmCaixa_Fechamento
         object m1: TfrxMemoView
           Align = baLeft
           AllowVectorExport = True
-          Top = 1.779530000000000000
+          Top = 1.779529999999990000
           Width = 211.653680000000000000
           Height = 15.118110240000000000
           Font.Charset = DEFAULT_CHARSET
@@ -2955,19 +2955,17 @@ object frmCaixa_Fechamento: TfrmCaixa_Fechamento
           Memo.UTF8W = (
             '[frDados."Descricao"]')
           ParentFont = False
-          WordWrap = False
         end
         object m2: TfrxMemoView
-          Align = baLeft
+          Align = baRight
           AllowVectorExport = True
-          Left = 264.567100000000000000
-          Top = 1.779530000000000000
+          Left = 177.637910000000000000
+          Top = 1.779529999999990000
           Width = 86.929190000000000000
           Height = 15.118110240000000000
+          DataField = 'VALOR'
           DataSet = frxDados
           DataSetName = 'frDados'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -2976,15 +2974,13 @@ object frmCaixa_Fechamento: TfrmCaixa_Fechamento
           Frame.Typ = []
           HAlign = haRight
           Memo.UTF8W = (
-            '[frDados."usuario"]')
+            '[frDados."VALOR"]')
           ParentFont = False
-          WordWrap = False
         end
         object m3: TfrxMemoView
-          Align = baRight
           AllowVectorExport = True
-          Left = 64.252010000000000000
-          Top = 1.779530000000000000
+          Left = 177.637910000000000000
+          Top = 1.779529999999990000
           Width = 34.015770000000000000
           Height = 15.118110240000000000
           Visible = False
@@ -3001,29 +2997,6 @@ object frmCaixa_Fechamento: TfrmCaixa_Fechamento
           Memo.UTF8W = (
             '[frDados."negrito"]')
           ParentFont = False
-        end
-        object m4: TfrxMemoView
-          IndexTag = 1
-          Align = baRight
-          AllowVectorExport = True
-          Left = 98.267780000000000000
-          Top = 1.889763780000000000
-          Width = 166.299320000000000000
-          Height = 15.118110240000000000
-          DataSet = frxEmitente
-          DataSetName = 'frEmitente'
-          DisplayFormat.FormatStr = '%2.2f'
-          DisplayFormat.Kind = fkNumeric
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Style = []
-          Frame.Typ = []
-          Memo.UTF8W = (
-            '[frDados."VALOR"]')
-          ParentFont = False
-          WordWrap = False
         end
       end
     end

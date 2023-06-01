@@ -162,6 +162,7 @@ type
     FDataFechamento: TDatetime;
     TipoImp: TImpressora;
     Editar:Boolean;
+    FAlteraData: Boolean;
     function relatorio_dav():boolean;
     function relatorio_mesa():boolean;
 
@@ -172,6 +173,9 @@ type
     procedure z_fechamento();
 
     procedure InicializarCupom(AData: TDatetime);
+
+
+    property AlteraData: Boolean read FAlteraData write FAlteraData;
 
   public
     { Public declarations }
@@ -544,7 +548,7 @@ begin
     query.SQL.Add('LEFT JOIN ADM ON (ADM.CODIGO = NF.CODVENDEDOR)');
     query.SQL.Add('WHERE NF.ECF = COALESCE(:CAIXA, NF.ECF) ');
     query.SQL.Add('AND NF.DESCRICAO = ''SUPRIMENTO'' ');
-    query.SQL.Add('AND NF.DATA + NF.HORA >= :DATA');
+    query.SQL.Add(iif(FAlteraData, 'AND NF.DATA BETWEEN :DI AND :DF','AND NF.DATA + NF.HORA >= :DATA'));
     query.SQL.Add('AND (:TIPO = 0 OR :TIPO = 1)');
     query.SQL.Add('AND NF.INDICE <> ''RG'' ');
     query.SQL.Add('UNION ALL');
@@ -553,13 +557,13 @@ begin
     query.SQL.Add('LEFT JOIN ADM ON (ADM.CODIGO = NF.CODVENDEDOR)');
     query.SQL.Add('WHERE NF.ECF = COALESCE(:CAIXA, NF.ECF) ');
     query.SQL.Add('AND NF.DESCRICAO = ''SANGRIA'' ');
-    query.SQL.Add('AND NF.DATA + NF.HORA >= :DATA');
+    query.SQL.Add(iif(FAlteraData, 'AND NF.DATA BETWEEN :DI AND :DF','AND NF.DATA + NF.HORA >= :DATA'));
     query.SQL.Add('AND (:TIPO = 0 OR :TIPO = 1)');
     query.SQL.Add('AND NF.INDICE <> ''RG'' ');
 
     Separar := Ini.ReadBool('Fortes','SepararListagens', False);
     if not Separar then
-      query.sql.Add('ORDER BY 1, 2');
+      query.sql.Add('ORDER BY 1, 2, 3');
 
     //query.ParamByName('CAIXA').AsString := sCaixa;
     if ImpSup and ImpSag then
@@ -572,7 +576,16 @@ begin
       i := 2;
 
     query.ParamByName('TIPO').AsInteger := i;
-    query.ParamByName('DATA').AsDateTime := FDataFechamento;
+
+    case FAlteraData of
+      True :
+      begin
+        query.ParamByName('DI').AsDateTime := FDataFechamento;
+        query.ParamByName('DF').AsDateTime := FDataFechamento;
+      end;
+
+      False: query.ParamByName('DATA').AsDateTime := FDataFechamento;
+    end;
 
     query.Open;
     if query.RecordCount > 0 then
@@ -811,8 +824,9 @@ end;
 
 procedure TfrmCaixa_Fechamento.FormCreate(Sender: TObject);
 begin
-  Editar   := False; //Usado para quando Editar o relatório
-  Pergunta := False;
+  Editar      := False; //Usado para quando Editar o relatório
+  Pergunta    := False;
+  FAlteraData := False;
 end;
 
 // -------------------------------------------------------------------------- //
@@ -843,7 +857,11 @@ begin
   qrEncerrante.sql.add('SELECT C.* FROM CONFIG C WHERE CODIGO=0');
   qrEncerrante.Open;
   qrEncerrante.First;
-  ed_data.Date := dData_Movimento;
+
+//  ed_data.Date := dData_Movimento;
+
+  ed_data.Date := qrEncerrante.fieldbyname('CAIXA_DATA_MOVTO').Value;
+
   InicializarCupom(qrEncerrante.fieldbyname('fechamento').AsDateTime);
 end;
 
@@ -984,10 +1002,12 @@ begin
     TfrxMemoView(Sender).Text := 'Caixa: ' + IntToStr(iNumCaixa);
   if TfrxMemoView(Sender).Name = 'mOperador' then
     TfrxMemoView(Sender).Text := 'Operador: ' + ed_operador.Text;
-  if TfrxMemoView(Sender).Name = 'mData' then
-    TfrxMemoView(Sender).Text := 'Data: ' + FormatDateTime('dd/mm/yyy', iif(AdvGlowButton1.Enabled, Now, ed_data.Date));
-  if TfrxMemoView(Sender).Name = 'mHora' then
-    TfrxMemoView(Sender).Text := 'Horário: ' + iif(AdvGlowButton1.Enabled,FormatDateTime('hh:mm:ss', Now), '00:00:00');
+  if TfrxMemoView(Sender).Name = 'Memo6' then
+//    TfrxMemoView(Sender).Text := 'Data: ' + FormatDateTime('dd/mm/yyy', iif(AdvGlowButton1.Enabled, Now, ed_data.Date));
+    TfrxMemoView(Sender).Text := 'Data: ' + FormatDateTime('dd/mm/yyy', iif(FAlteraData, ed_data.Date, Now));
+  if TfrxMemoView(Sender).Name = 'Memo10' then
+//    TfrxMemoView(Sender).Text := 'Horário: ' + iif(AdvGlowButton1.Enabled,FormatDateTime('hh:mm:ss', Now), '00:00:00');
+    TfrxMemoView(Sender).Text := 'Horário: ' + iif(FAlteraData, '00:00:00',FormatDateTime('hh:mm:ss', Now));
 end;
 
 // -------------------------------------------------------------------------- //
@@ -1004,14 +1024,18 @@ var
 begin
   // verificar serial do ecf
   Continua := False;
-  if not Pergunta then begin
+  if not Pergunta then
+  begin
     if application.messagebox(pwidechar('Atenção!'+#13+
                                         'Deseja efetuar o fechamento do Caixa?'),
                                         'Atenção',mb_yesno+mb_iconwarning+MB_DEFBUTTON2) = idyes then
       Continua := True;
-  end else
+  end
+  else
     Continua := True;
-  if Continua then begin
+
+  if Continua then
+  begin
     brefaz_dav := false;
     if not relatorio_dav() then brefaz_dav := true;
 
@@ -1064,7 +1088,10 @@ begin
   if ADate > now then
     ADate := now
   else
-    ADate := ADate + StrToTime(FormatDateTime('hh:mm:ss', now));
+//    ADate := ADate + StrToTime(FormatDateTime('hh:mm:ss', now));
+    ADate := ADate + StrToTime(FormatDateTime('hh:mm:ss', StrToTime('00:00:00')));
+
+  FAlteraData := True;
   InicializarCupom(ADate);
 end;
 
@@ -1077,7 +1104,10 @@ begin
     if ed_data.Date > now then
       lData := now
     else
-      lData := ed_data.Date + StrToTime(FormatDateTime('hh:mm:ss', now));
+//      lData := ed_data.Date + StrToTime(FormatDateTime('hh:mm:ss', now));
+      lData := ed_data.Date + StrToTime(FormatDateTime('hh:mm:ss', StrToTime('00:00:00')));
+
+    FAlteraData := True;
     InicializarCupom(lData);
   end;
 end;
