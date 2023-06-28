@@ -411,8 +411,8 @@ object frmConfig: TfrmConfig
     Top = 48
     Width = 1361
     Height = 442
-    ActivePage = PageSheet6
-    ActivePageIndex = 6
+    ActivePage = PageSheet7
+    ActivePageIndex = 7
     AdaptiveColors = True
     Align = alClient
     BackgroundColor = 15264234
@@ -3078,7 +3078,7 @@ object frmConfig: TfrmConfig
       end
       object GroupBox3: TGroupBox
         Left = 284
-        Top = 191
+        Top = 213
         Width = 313
         Height = 65
         Caption = 'Suprimento e Sangria'
@@ -3105,9 +3105,9 @@ object frmConfig: TfrmConfig
       end
       object GroupBox18: TGroupBox
         Left = 284
-        Top = 90
+        Top = 89
         Width = 314
-        Height = 95
+        Height = 116
         Caption = 'Fechamento'
         TabOrder = 5
         object chkInverterOrderImpressao: TCheckBox
@@ -3121,7 +3121,7 @@ object frmConfig: TfrmConfig
         end
         object chkImprimirListageSuprimentos: TCheckBox
           Left = 9
-          Top = 35
+          Top = 36
           Width = 186
           Height = 18
           Caption = 'Imprimir listagem de suprimentos'
@@ -3130,7 +3130,7 @@ object frmConfig: TfrmConfig
         end
         object chkImprimirListagemSangrias: TCheckBox
           Left = 9
-          Top = 54
+          Top = 55
           Width = 186
           Height = 18
           Caption = 'Imprimir listagem de sangrias'
@@ -3139,11 +3139,20 @@ object frmConfig: TfrmConfig
         end
         object chkSepararListagens: TCheckBox
           Left = 9
-          Top = 73
+          Top = 74
           Width = 300
           Height = 18
           Caption = 'Separar listagens de suprimentos e sangrias na impress'#227'o'
           TabOrder = 3
+          WordWrap = True
+        end
+        object chk_imprimir_fech_cego: TCheckBox
+          Left = 9
+          Top = 93
+          Width = 186
+          Height = 18
+          Caption = 'Imprimir fechamento cego'
+          TabOrder = 4
           WordWrap = True
         end
       end
@@ -4858,7 +4867,7 @@ object frmConfig: TfrmConfig
           Top = 1
           Width = 1359
           Height = 419
-          ActivePage = TabSheet4
+          ActivePage = Impressao
           Align = alClient
           TabOrder = 0
           object tsDadosSAT: TTabSheet
@@ -6261,8 +6270,8 @@ object frmConfig: TfrmConfig
         TabOrder = 3
       end
       object edLioberado: TCheckBox
-        Left = 8
-        Top = 8
+        Left = 3
+        Top = 7
         Width = 110
         Height = 17
         Caption = 'Libera uso do TEF'

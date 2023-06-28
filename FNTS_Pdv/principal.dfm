@@ -7299,8 +7299,8 @@ object frmPrincipal: TfrmPrincipal
       object RzLabel1: TRzLabel
         Left = 0
         Top = 0
-        Width = 376
-        Height = 20
+        Width = 124
+        Height = 14
         Align = alClient
         Alignment = taCenter
         Caption = 'Registro do Sistema'
@@ -7312,8 +7312,6 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
         Transparent = True
         Layout = tlCenter
-        ExplicitWidth = 124
-        ExplicitHeight = 14
       end
     end
   end

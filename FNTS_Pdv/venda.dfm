@@ -23,17 +23,6 @@ object frmVenda: TfrmVenda
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object fl: TFileListBoxEx
-    Left = 870
-    Top = 493
-    Width = 121
-    Height = 112
-    Mask = '*.cga'
-    ShowGlyphs = True
-    TabOrder = 1
-    Visible = False
-    Version = '1.3.0.3'
-  end
   object pn_tampa: TFlatPanel
     Left = 4000
     Top = 6000
@@ -44,6 +33,17 @@ object frmVenda: TfrmVenda
     ColorHighLight = clBlack
     ColorShadow = clBlack
     TabOrder = 0
+  end
+  object fl: TFileListBoxEx
+    Left = 870
+    Top = 493
+    Width = 121
+    Height = 112
+    Mask = '*.cga'
+    ShowGlyphs = True
+    TabOrder = 1
+    Visible = False
+    Version = '1.3.0.3'
   end
   object pnFundo: TPanel
     Left = 0
@@ -126,8 +126,8 @@ object frmVenda: TfrmVenda
               object lb_produto: TRzLabel
                 Left = 5
                 Top = 5
-                Width = 321
-                Height = 42
+                Width = 1488
+                Height = 47
                 Align = alClient
                 Alignment = taCenter
                 Caption = 'C A I X A    L I V R E'
@@ -140,6 +140,8 @@ object frmVenda: TfrmVenda
                 Transparent = True
                 Layout = tlCenter
                 ShadowColor = clBlack
+                ExplicitWidth = 321
+                ExplicitHeight = 42
               end
             end
           end
@@ -3303,8 +3305,8 @@ object frmVenda: TfrmVenda
                     D8ABAF0000000049454E44AE426082}
                   Version = '1.1.1.0'
                   Visible = False
-                  ExplicitLeft = -6
-                  ExplicitTop = 4
+                  ExplicitLeft = 6
+                  ExplicitTop = -6
                 end
                 object v_tipo_normal_campos: TRzPanel
                   Left = 0
@@ -4047,7 +4049,7 @@ object frmVenda: TfrmVenda
                 object lbTotal: TRzLabel
                   Left = 5
                   Top = 5
-                  Width = 37
+                  Width = 375
                   Height = 16
                   Align = alTop
                   Caption = 'Total:'
@@ -4058,6 +4060,7 @@ object frmVenda: TfrmVenda
                   Font.Style = [fsBold]
                   ParentFont = False
                   Transparent = True
+                  ExplicitWidth = 37
                 end
               end
               object Panel14: TPanel
@@ -4093,7 +4096,7 @@ object frmVenda: TfrmVenda
                 object RzLabel7: TRzLabel
                   Left = 5
                   Top = 5
-                  Width = 34
+                  Width = 146
                   Height = 16
                   Align = alTop
                   Caption = 'Itens'
@@ -4104,6 +4107,7 @@ object frmVenda: TfrmVenda
                   Font.Style = [fsBold]
                   ParentFont = False
                   Transparent = True
+                  ExplicitWidth = 34
                 end
               end
               object Panel15: TPanel

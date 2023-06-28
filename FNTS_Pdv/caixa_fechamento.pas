@@ -558,7 +558,7 @@ begin
     query.SQL.Add('WHERE NF.ECF = COALESCE(:CAIXA, NF.ECF) ');
     query.SQL.Add('AND NF.DESCRICAO = ''SANGRIA'' ');
     query.SQL.Add(iif(FAlteraData, 'AND NF.DATA BETWEEN :DI AND :DF','AND NF.DATA + NF.HORA >= :DATA'));
-    query.SQL.Add('AND (:TIPO = 0 OR :TIPO = 1)');
+    query.SQL.Add('AND (:TIPO = 0 OR :TIPO = 2)');
     query.SQL.Add('AND NF.INDICE <> ''RG'' ');
 
     Separar := Ini.ReadBool('Fortes','SepararListagens', False);
@@ -1070,10 +1070,14 @@ begin
       query.ExecSQL;
       if not Pergunta then
         Application.MessageBox('Procedimento concluído com sucesso!','Aviso',mb_ok+MB_ICONINFORMATION);
-      CLOSE;
+
       if frmVenda <> nil then
+      begin
+        frmVenda.ConfirmaFecCaixa := True;
         if FRMVENDA.Visible then
           FRMVENDA.CLOSE;
+      end;
+      CLOSE;
     end;
   end;
 end;

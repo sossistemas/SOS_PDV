@@ -2281,7 +2281,8 @@ procedure Tfrmmodulo.FechaAbreCaixas;
 var
   Saldo_Anterior: Double;
 begin
-  qrcaixa_operador.Locate('codigo', Caixa_Geral, [loCaseInsensitive]);
+  if qrcaixa_operador.State = dsBrowse then
+    qrcaixa_operador.Locate('codigo', Caixa_Geral, [loCaseInsensitive]);
 
   Qrsoma.Close;
   Qrsoma.SQL.clear;

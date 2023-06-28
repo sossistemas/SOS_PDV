@@ -832,8 +832,12 @@ begin
 						end;
 						if query_servidor.FieldByName('DATA').AsDateTime <> dData_Sistema then
 						begin
-							Application.MessageBox('Não foi aberto um novo Caixa Geral "99" no Gerencial, impossivel realizar vendas!','Atenção!',MB_ICONINFORMATION);
-							Exit;
+//							Application.MessageBox('Não foi aberto um novo Caixa Geral "99" no Gerencial, impossivel realizar vendas!','Atenção!',MB_ICONINFORMATION);
+//							Exit;
+              frmmodulo.qrcaixa_operador.Close;
+				      frmmodulo.qrcaixa_operador.Open;
+
+              FechaAbreCaixas;
 						end;
 						if query_servidor.FieldByName('SITUACAO').AsInteger <> 1 then
 						begin

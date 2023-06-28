@@ -566,6 +566,7 @@ type
     bVerificaIniternet, bFezDevolucao: Boolean;
     FNroCupom: string;
     FPRecTEF: Double;
+    FConfirmaFecCaixa: Boolean;
 
     procedure LancaMesaComanda(MesasComandas: string);
 
@@ -597,7 +598,7 @@ type
 
     procedure VerificarRecebimentoTef;
 
-
+    function ChecagemVendaAberta: Boolean;
     function ImgTipoImpressora(i: Integer): TImpressora;
     function RetornaSenhaImpressao: Integer;
 
@@ -622,6 +623,8 @@ type
 
 
     property PRecTEF: Double read FPRecTEF write FPRecTEF;
+    property ConfirmaFecCaixa: Boolean read FConfirmaFecCaixa write FConfirmaFecCaixa;
+
     var
       vr_saldo, vr_recebido, vr_total: string;
       IndiceTransacaoTef: Integer;
@@ -1908,7 +1911,6 @@ begin
     gravaINI(sConfiguracoes, 'PDV', 'Aberto', 'SIM')
   else
     gravaINI(sConfiguracoes, 'PDV', 'Aberto', 'NAO');
-
 end;
 
 procedure TfrmVenda.Cancela_Item(sItem: string; Acao: string);
@@ -1974,6 +1976,7 @@ begin
   qrEstoque.Close;
   qrEstoque.Params.Items[0].Value := iProd_codigo;
   qrEstoque.Open;
+
   if (bSenhaVendaSemEstoque) or (bVerificaProdutoVenda) then begin
     if (bSenhaVendaSemEstoque) then begin
       if (qrEstoqueESTOQUE.AsFloat - (rProd_qtde * QtdVolume)) < 0 then begin
@@ -2921,6 +2924,8 @@ begin
 end;
 
 procedure TfrmVenda.VerificarRecebimentoTef;
+// quando usuário volta pra tela de itens, verifica se houve recebimento no tef,
+//se sim, não pode excluir do dataset os registros ja recebidos via tef
 begin
   if not(FPRecTEF > 0) then
   begin
@@ -3028,17 +3033,19 @@ end;
 
 procedure TfrmVenda.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  // verificar se ha cupom aberto, nao permitindo a saida do sistema
-  if bVenda then begin
-    Imprime_display('CUPOM ABERTO!', clYellow, tiAlerta);
-    Sleep(1500);
-    Imprime_display('INFORME O PRODUTO...', clWhite, tiLivre);
-    if not AtivaTouch then
-      if ed_barra.Enabled then
-        ed_barra.SetFocus;
-    Abort;
-  end
-  else begin
+//  // verificar se ha cupom aberto, nao permitindo a saida do sistema
+//  if bVenda then begin
+//    Imprime_display('CUPOM ABERTO!', clYellow, tiAlerta);
+//    Sleep(1500);
+//    Imprime_display('INFORME O PRODUTO...', clWhite, tiLivre);
+//    if not AtivaTouch then
+//      if ed_barra.Enabled then
+//        ed_barra.SetFocus;
+//    Abort;
+//  end
+
+  if not ChecagemVendaAberta then
+  begin
     if (TipoDeCupom = tcNFCE) then begin
       CheckConnect.Terminate;
       FreeAndNil(CheckConnect);
@@ -3046,12 +3053,17 @@ begin
     timer_carga.Enabled := False;
     TimerTroco.Enabled := False;
     tmContigencia.Enabled := False;
-  end;
+  end
+  else
+    abort;
+
   tmCaixa.Enabled := False;
   FreeAndNil(sMensagem_Cupom);
   FreeAndNil(sObsProduto);
   if TEF_Ativo then
     FreeAndNil(frmTEF);
+
+  FConfirmaFecCaixa := False;
 end;
 
 // -------------------------------------------------------------------------- //
@@ -3060,6 +3072,8 @@ procedure TfrmVenda.FormCreate(Sender: TObject);
 var
   Ini: TIniFile;
 begin
+  FConfirmaFecCaixa := False;
+
   wspnlAlerta.Left := 3000; //qiqi
   wspnlAlerta.Top := 0;
   v_tipo_normal.Visible := not AtivaTouch;
@@ -6096,17 +6110,24 @@ end;
 
 procedure TfrmVenda.Cupons1Click(Sender: TObject);
 begin
-  if bVenda then
+//  if bVenda then
+//  begin
+//    Imprime_display('CUPOM ABERTO!', clYellow, tiAlerta);
+//    Sleep(1500);
+//    Imprime_display('INFORME O PRODUTO...', clWhite, tiLivre);
+//    if not AtivaTouch and ed_barra.Enabled then
+//      ed_barra.SetFocus;
+//    Exit;
+//  end;
+
+  if not ChecagemVendaAberta then
   begin
-    Imprime_display('CUPOM ABERTO!', clYellow, tiAlerta);
-    Sleep(1500);
-    Imprime_display('INFORME O PRODUTO...', clWhite, tiLivre);
-    if not AtivaTouch and ed_barra.Enabled then
-      ed_barra.SetFocus;
+    frmCupom_Menu := TfrmCupom_Menu.create(Self);
+    frmCupom_Menu.showmodal;
+  end
+  else
     Exit;
-  end;
-  frmCupom_Menu := TfrmCupom_Menu.create(Self);
-  frmCupom_Menu.showmodal;
+
 end;
 
 procedure TfrmVenda.cxGrid1DBBandedTableView1FocusedRecordChanged(Sender: TcxCustomGridTableView; APrevFocusedRecord, AFocusedRecord: TcxCustomGridRecord; ANewItemRecordFocusingChanged: Boolean);
@@ -6224,27 +6245,38 @@ end;
 
 procedure TfrmVenda.FecharCaixa1Click(Sender: TObject);
 begin
-  frmSenha_Supervisor := TfrmSenha_Supervisor.create(Self);
-  frmSenha_Supervisor.FechaCaixa := True;
-  frmSenha_Supervisor.showmodal;
-  frmVenda.Imprime_display_anterior;
+  if not ChecagemVendaAberta then
+  begin
+    frmSenha_Supervisor := TfrmSenha_Supervisor.create(Self);
+    frmSenha_Supervisor.FechaCaixa := True;
+    frmSenha_Supervisor.showmodal;
+//    frmVenda.Imprime_display_anterior;
 
-  if not bSupervisor_autenticado then
-    Exit;
+    if not bSupervisor_autenticado then
+      Exit;
 
-  try
-    pn_tampa.Visible := True;
-    if bFechamentoCego then begin
-      frmFechamentoCego := TfrmFechamentoCego.create(Self);
-      frmFechamentoCego.showmodal;
-    end
-    else begin
-      frmCaixa_Fechamento := TfrmCaixa_Fechamento.create(Self);
-      frmCaixa_Fechamento.showmodal;
+    Imprime_display('FECHAMENTO DO CAIXA', clWhite, tiLivre);
+
+    try
+      pn_tampa.Visible := True;
+
+      if bFechamentoCego then begin
+        frmFechamentoCego := TfrmFechamentoCego.create(Self);
+        frmFechamentoCego.showmodal;
+      end
+      else begin
+        frmCaixa_Fechamento := TfrmCaixa_Fechamento.create(Self);
+        frmCaixa_Fechamento.showmodal;
+      end;
+    finally
+      pn_tampa.visible := False;
+
+      if not FConfirmaFecCaixa then
+        Imprime_display('C A I X A    L I V R E', clWhite, tiLivre);
     end;
-  finally
-    pn_tampa.visible := False;
-  end;
+  end
+  else
+    Exit;
 end;
 
 // -------------------------------------------------------------------------- //
@@ -7691,6 +7723,25 @@ procedure TfrmVenda.CentralizarPanel(p: TPanel);
 begin
   p.Top := (Height - p.Height) div 2;
   p.Left := (Width - p.Width) div 2;
+end;
+
+function TfrmVenda.ChecagemVendaAberta: Boolean;
+begin
+  Result := False;
+
+  if bVenda then
+  begin
+    Imprime_display('CUPOM ABERTO!', clYellow, tiAlerta);
+    Sleep(1500);
+    Imprime_display('INFORME O PRODUTO...', clWhite, tiLivre);
+    if not AtivaTouch then
+    begin
+      if ed_barra.Enabled then
+        ed_barra.SetFocus;
+    end;
+
+    Result := True;
+  end;
 end;
 
 procedure TfrmVenda.colBotAlmuntarPropertiesButtonClick(Sender: TObject; AButtonIndex: Integer);

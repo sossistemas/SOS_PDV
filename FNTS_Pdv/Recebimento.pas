@@ -501,7 +501,11 @@ begin
                 frmTef.cpPosPrinter.Imprimir;}
 
                 cdsRecebimento.Append;
-                cdsRecebimentoTipo.AsString := ret.TipoDeCartcao;
+                if ret.TipoDeCartcao <> EmptyStr then
+                  cdsRecebimentoTipo.AsString := ret.TipoDeCartcao
+                else
+                  cdsRecebimentoTipo.AsString := 'TEF';
+
                 cdsRecebimentovalor.AsFloat := Valor.Valor;
                 cdsRecebimentoParcelas.AsInteger := ret.Parcelas;
                 cdsRecebimentoBanco.AsInteger := Banceira.Numero;

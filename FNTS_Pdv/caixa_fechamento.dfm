@@ -2771,7 +2771,7 @@ object frmCaixa_Fechamento: TfrmCaixa_Fechamento
           Align = baCenter
           AllowVectorExport = True
           Left = 109.606370000000000000
-          Top = 22.677180000000000000
+          Top = 23.343846670000000000
           Width = 45.354360000000000000
           Height = 15.118120000000000000
           AutoWidth = True

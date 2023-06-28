@@ -623,6 +623,7 @@ type
     wwDBTrocoMaximo: TwwDBEdit;
     qrconfigTROCO_MAXIMO: TFloatField;
     Label96: TLabel;
+    chk_imprimir_fech_cego: TCheckBox;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure EditLogoMarcaClickBtn(Sender: TObject);
@@ -1442,6 +1443,7 @@ begin
     INI.WriteBool('Fortes','ImprimirListagemSuprimentos',chkImprimirListageSuprimentos.Checked);
     INI.WriteBool('Fortes','ImprimirListagemSangrias',chkImprimirListagemSangrias.Checked);
     INI.WriteBool('Fortes','SepararListagens',chkSepararListagens.Checked);
+    INI.WriteBool('Fortes','ImprimirFechamentoCego',chk_imprimir_fech_cego.Checked);
 
     INI.WriteString('Printer','Name',lImpressora.Caption);
 
@@ -1764,7 +1766,8 @@ begin
     chkInverterOrderImpressao.Checked := Ini.ReadBool('Fortes','InverterOrderImpressao', False);
     chkImprimirListageSuprimentos.Checked := Ini.ReadBool('Fortes','ImprimirListagemSuprimentos', False);
     chkImprimirListagemSangrias.Checked := Ini.ReadBool('Fortes','ImprimirListagemSangrias', False);
-    chkSepararListagens.Checked := Ini.ReadBool('Fortes','SepararListagens', False);
+    chkSepararListagens.Checked    := Ini.ReadBool('Fortes','SepararListagens', False);
+    chk_imprimir_fech_cego.Checked := Ini.ReadBool('Fortes','ImprimirFechamentoCego', False);
 
     lImpressora.Caption := INI.ReadString('Printer','Name','');
 
