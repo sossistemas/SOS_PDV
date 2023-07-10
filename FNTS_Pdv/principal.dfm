@@ -7299,8 +7299,8 @@ object frmPrincipal: TfrmPrincipal
       object RzLabel1: TRzLabel
         Left = 0
         Top = 0
-        Width = 124
-        Height = 14
+        Width = 376
+        Height = 20
         Align = alClient
         Alignment = taCenter
         Caption = 'Registro do Sistema'
@@ -7312,6 +7312,8 @@ object frmPrincipal: TfrmPrincipal
         ParentFont = False
         Transparent = True
         Layout = tlCenter
+        ExplicitWidth = 124
+        ExplicitHeight = 14
       end
     end
   end
@@ -7859,10 +7861,10 @@ object frmPrincipal: TfrmPrincipal
     end
   end
   object ACBrNFe1: TACBrNFe
-    Configuracoes.Geral.SSLLib = libCapicomDelphiSoap
-    Configuracoes.Geral.SSLCryptLib = cryCapicom
+    Configuracoes.Geral.SSLLib = libCustom
+    Configuracoes.Geral.SSLCryptLib = cryNone
     Configuracoes.Geral.SSLHttpLib = httpIndy
-    Configuracoes.Geral.SSLXmlSignLib = xsMsXmlCapicom
+    Configuracoes.Geral.SSLXmlSignLib = xsNone
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
     Configuracoes.Geral.VersaoQRCode = veqr000
     Configuracoes.Arquivos.OrdenacaoPath = <>

@@ -4607,10 +4607,10 @@ object frmModulo: TfrmModulo
   end
   object ACBRNFCe: TACBrNFe
     OnStatusChange = ACBRNFCeStatusChange
-    Configuracoes.Geral.SSLLib = libCapicomDelphiSoap
-    Configuracoes.Geral.SSLCryptLib = cryCapicom
+    Configuracoes.Geral.SSLLib = libCustom
+    Configuracoes.Geral.SSLCryptLib = cryNone
     Configuracoes.Geral.SSLHttpLib = httpIndy
-    Configuracoes.Geral.SSLXmlSignLib = xsMsXmlCapicom
+    Configuracoes.Geral.SSLXmlSignLib = xsNone
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
     Configuracoes.Geral.ValidarDigest = False
     Configuracoes.Arquivos.SepararPorModelo = True

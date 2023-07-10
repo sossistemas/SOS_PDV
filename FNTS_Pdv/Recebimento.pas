@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, dxGDIPlusClasses, Vcl.ExtCtrls,
   AdvGlowButton, System.Actions, Vcl.ActnList, Vcl.StdCtrls, Data.DB, Datasnap.DBClient,
-  inifiles, MemDS, DBAccess, Uni;
+  inifiles, MemDS, DBAccess, Uni, System.ImageList, Vcl.ImgList, acPNG;
 
 type
   TRecebimento = record
@@ -94,6 +94,11 @@ type
     btnCartaoDE: TAdvGlowButton;
     btnCrediario: TAdvGlowButton;
     btnTef: TAdvGlowButton;
+    btnPix: TAdvGlowButton;
+    Action12: TAction;
+    ImageList1: TImageList;
+    Image8: TImage;
+    pnPix: TPanel;
     procedure Action11Execute(Sender: TObject);
     procedure Action2Execute(Sender: TObject);
     procedure Action4Execute(Sender: TObject);
@@ -106,9 +111,10 @@ type
     procedure Action3Execute(Sender: TObject);
     procedure Action9Execute(Sender: TObject);
     procedure Action7Execute(Sender: TObject);
+    procedure Action12Execute(Sender: TObject);
   private
     { Private declarations }
-    RecDinheiro, RecCrediario, RecConvenio, RecCartaoCR, RecCartaoDE, RecCheque, RecTEF, Desconto, Acrescimo, Recebido, Troco, TotalReceber, NovoAcrescimo, Saldo: Double;
+    RecDinheiro, RecCrediario, RecConvenio, RecCartaoCR, RecCartaoDE, RecCheque, RecTEF, RecPix, Desconto, Acrescimo, Recebido, Troco, TotalReceber, NovoAcrescimo, Saldo: Double;
     Continua: Boolean;
     procedure MostraDados;
     procedure LancaAutomatico(Tipo:string;Valor:Double);
@@ -198,6 +204,69 @@ procedure TfrmRecebimento.Action11Execute(Sender: TObject);
 begin
   Continua := False;
   Close;
+end;
+
+procedure TfrmRecebimento.Action12Execute(Sender: TObject);
+var
+  Valor: tValorReceber;
+begin
+  if Saldo <= 0 then
+  begin
+    Application.MessageBox('Não existe mais saldo para receber!', 'Atenção!', MB_ICONINFORMATION);
+    Exit;
+  end;
+
+  RecebeCupomCredito.id    := -1;
+  RecebeCupomCredito.Cupom := '';
+  RecebeCupomCredito.Valor := 0;
+
+  if not Assigned(frmReceber_Valor) then
+    Application.CreateForm(TfrmReceber_Valor,frmReceber_Valor);
+
+  frmReceber_Valor.TrocoMaximo := frmModulo.qrConfigPDVTROCO_MAXIMO.Value;
+
+  Valor := RetornaValorRecebimento(Saldo, False, tmPix, tvRecebimento);
+
+  if Valor.Confirma then
+  begin
+    RecPix := Roundto(RecPix + Valor.Valor, -2);
+
+    Troco := Roundto(Saldo - Valor.Valor, -2);
+    if Troco < 0 then
+    begin
+      Troco := Troco * (-1);
+      Saldo := 0;
+    end
+    else
+    begin
+      Troco := 0;
+      Saldo := Roundto(Saldo - Valor.Valor, -2);
+    end;
+
+    Recebido := Recebido + Valor.Valor;
+
+    with frmVenda do
+    begin
+      cdsRecebimento.Append;
+      cdsRecebimentoTipo.AsString := StRecPix;
+      cdsRecebimentovalor.AsFloat := Valor.Valor;
+
+      if RecebeCupomCredito.id > 0 then
+      begin
+        cdsRecebimentoCupomCreditoID.AsInteger   := RecebeCupomCredito.id;
+        cdsRecebimentoCupomCreditoCupom.AsString := RecebeCupomCredito.Cupom;
+        cdsRecebimentoCupomCreditoValor.AsFloat  := RecebeCupomCredito.Valor;
+      end;
+
+      cdsRecebimentoRecTEF.Value := False;
+      cdsRecebimento.Post;
+    end;
+  end;
+
+  MostraDados;
+  if Saldo = 0 then
+    btnFinalizar.SetFocus;
+
 end;
 
 procedure TfrmRecebimento.Action1Execute(Sender: TObject);
@@ -710,19 +779,20 @@ end;
 
 procedure TfrmRecebimento.MostraDados;
 begin
-  pnDinheiro.Caption := 'R$ ' + FormatFloat('#,##0.00', RecDinheiro);
-  pnCrediario.Caption := 'R$ ' + FormatFloat('#,##0.00', RecCrediario);
-  pnConvenio.Caption := 'R$ ' + FormatFloat('#,##0.00', RecConvenio);
+  pnDinheiro.Caption      := 'R$ ' + FormatFloat('#,##0.00', RecDinheiro);
+  pnCrediario.Caption     := 'R$ ' + FormatFloat('#,##0.00', RecCrediario);
+  pnConvenio.Caption      := 'R$ ' + FormatFloat('#,##0.00', RecConvenio);
   pnCartaoCredito.Caption := 'R$ ' + FormatFloat('#,##0.00', RecCartaoCR);
-  pnCartaoDebito.Caption := 'R$ ' + FormatFloat('#,##0.00', RecCartaoDE);
-  pnChque.Caption := 'R$ ' + FormatFloat('#,##0.00', RecCheque);
-  pnTEF.Caption := 'R$ ' + FormatFloat('#,##0.00', RecTEF);
+  pnCartaoDebito.Caption  := 'R$ ' + FormatFloat('#,##0.00', RecCartaoDE);
+  pnChque.Caption         := 'R$ ' + FormatFloat('#,##0.00', RecCheque);
+  pnTEF.Caption           := 'R$ ' + FormatFloat('#,##0.00', RecTEF);
+  pnPix.Caption           := 'R$ ' + FormatFloat('#,##0.00', RecPix);
 
-  pnDesconto.Caption := 'R$ ' + FormatFloat('#,##0.00', NovoDesconto);
-  pnAcrescimo.Caption := 'R$ ' + FormatFloat('#,##0.00', NovoAcrescimo);
-  pnRecebido.Caption := 'R$ ' + FormatFloat('#,##0.00', Recebido);
-  pnSaldo.Caption := 'R$ ' + FormatFloat('#,##0.00', Saldo);
-  pnTroco.Caption := 'R$ ' + FormatFloat('#,##0.00', Troco);
+  pnDesconto.Caption      := 'R$ ' + FormatFloat('#,##0.00', NovoDesconto);
+  pnAcrescimo.Caption     := 'R$ ' + FormatFloat('#,##0.00', NovoAcrescimo);
+  pnRecebido.Caption      := 'R$ ' + FormatFloat('#,##0.00', Recebido);
+  pnSaldo.Caption         := 'R$ ' + FormatFloat('#,##0.00', Saldo);
+  pnTroco.Caption         := 'R$ ' + FormatFloat('#,##0.00', Troco);
 end;
 
 end.

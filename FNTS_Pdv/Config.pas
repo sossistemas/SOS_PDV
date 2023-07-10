@@ -624,6 +624,8 @@ type
     qrconfigTROCO_MAXIMO: TFloatField;
     Label96: TLabel;
     chk_imprimir_fech_cego: TCheckBox;
+    edCodPix: TEdit;
+    Label97: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure EditLogoMarcaClickBtn(Sender: TObject);
@@ -727,6 +729,7 @@ type
     procedure qrconfigAfterOpen(DataSet: TDataSet);
     procedure qrconfigPRAZO_DEVOLUCAOSetText(Sender: TField; const Text: string);
     procedure qrconfigPRAZO_DEVOLUCAOGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure edCodPixKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     procedure GravaConfiguracoesLocais;
@@ -1414,6 +1417,10 @@ begin
     INI.WriteBool('SAT','SalvarEnvio', cbxSalvarEnvio.Checked);
     INI.WriteBool('SAT','SepararPorCNPJ', cbxSepararPorCNPJSat.Checked);
     INI.WriteBool('SAT','SepararPorMES', cbxSepararPorMES.Checked);
+    INI.WriteString('SAT','PATH_SALVAR_ENVIO',edPathSalvarXmlSatEnvio.Text);
+    INI.WriteString('SAT','PATH_SALVAR_VENDA',edPathSalvarXmlSatVenda.Text);
+    INI.WriteString('SAT','PATH_SALVAR_CANC',edPathSalvarXmlSatCanc.Text);
+    Ini.WriteString('SAT','CodigoPix', Trim(edCodPix.Text));
 
     INI.WriteString('Emit','CNPJ',edtEmitCNPJSat.Text);
     INI.WriteString('Emit','IE',edtEmitIESat.Text);
@@ -1421,10 +1428,6 @@ begin
     INI.WriteInteger('Emit','RegTributario',cbxRegTributario.ItemIndex);
     INI.WriteInteger('Emit','RegTribISSQN',cbxRegTribISSQN.ItemIndex);
     INI.WriteInteger('Emit','IndRatISSQN',cbxIndRatISSQN.ItemIndex);
-
-    INI.WriteString('SAT','PATH_SALVAR_ENVIO',edPathSalvarXmlSatEnvio.Text);
-    INI.WriteString('SAT','PATH_SALVAR_VENDA',edPathSalvarXmlSatVenda.Text);
-    INI.WriteString('SAT','PATH_SALVAR_CANC',edPathSalvarXmlSatCanc.Text);
 
     INI.WriteString('SwH','CNPJ',edtSwHCNPJ.Text);
     INI.WriteString('SwH','Assinatura',edtSwHAssinatura.Lines.Text);
@@ -1723,20 +1726,25 @@ begin
     edtEmitUF.Text := Ini.ReadString('Emitente', 'UF', '');
     edSerie.Text := Ini.ReadString('Emitente', 'Serie', '');
 
-    cbxModeloSat.ItemIndex    := INI.ReadInteger('SAT','Modelo',0);
-    edLog.Text             := INI.ReadString('SAT','ArqLog','ACBrSAT.log');
-    edNomeDLL.Text         := INI.ReadString('SAT','NomeDLL','C:\SAT\SAT.DLL');
-    edtCodigoAtivacao.Text := INI.ReadString('SAT','CodigoAtivacao','123456');
-    cbxAmbiente.ItemIndex  := INI.ReadInteger('SAT','Ambiente',1);
-    sePagCod.Value         := INI.ReadInteger('SAT','PaginaDeCodigo',0);
-    sfeVersaoEnt.Text      := FloatToString( INI.ReadFloat('SAT','versaoDadosEnt', cversaoDadosEnt) );
-    cbxUTF8.Checked   := INI.ReadBool('SAT','UTF8', True);
-    cbxFormatXML.Checked   := INI.ReadBool('SAT','FormatarXML', True);
-    cbxSalvarCFe.Checked     := INI.ReadBool('SAT','SalvarCFe', True);
-    cbxSalvarCFeCanc.Checked := INI.ReadBool('SAT','SalvarCFeCanc', True);
-    cbxSalvarEnvio.Checked   := INI.ReadBool('SAT','SalvarEnvio', True);
-    cbxSepararPorCNPJSat.Checked:= INI.ReadBool('SAT','SepararPorCNPJ', True);
-    cbxSepararPorMES.Checked := INI.ReadBool('SAT','SepararPorMES', True);
+    cbxModeloSat.ItemIndex       := INI.ReadInteger('SAT','Modelo',0);
+    edLog.Text                   := INI.ReadString('SAT','ArqLog','ACBrSAT.log');
+    edNomeDLL.Text               := INI.ReadString('SAT','NomeDLL','C:\SAT\SAT.DLL');
+    edtCodigoAtivacao.Text       := INI.ReadString('SAT','CodigoAtivacao','123456');
+    cbxAmbiente.ItemIndex        := INI.ReadInteger('SAT','Ambiente',1);
+    sePagCod.Value               := INI.ReadInteger('SAT','PaginaDeCodigo',0);
+    sfeVersaoEnt.Text            := FloatToString( INI.ReadFloat('SAT','versaoDadosEnt', cversaoDadosEnt));
+    cbxUTF8.Checked              := INI.ReadBool('SAT','UTF8', True);
+    cbxFormatXML.Checked         := INI.ReadBool('SAT','FormatarXML', True);
+    cbxSalvarCFe.Checked         := INI.ReadBool('SAT','SalvarCFe', True);
+    cbxSalvarCFeCanc.Checked     := INI.ReadBool('SAT','SalvarCFeCanc', True);
+    cbxSalvarEnvio.Checked       := INI.ReadBool('SAT','SalvarEnvio', True);
+    cbxSepararPorCNPJSat.Checked := INI.ReadBool('SAT','SepararPorCNPJ', True);
+    cbxSepararPorMES.Checked     := INI.ReadBool('SAT','SepararPorMES', True);
+    edPathSalvarXmlSatEnvio.Text := INI.ReadString('SAT','PATH_SALVAR_ENVIO','');
+    edPathSalvarXmlSatVenda.Text := INI.ReadString('SAT','PATH_SALVAR_VENDA','');
+    edPathSalvarXmlSatCanc.Text  := INI.ReadString('SAT','PATH_SALVAR_CANC','');
+    edCodPix.Text                := INI.ReadString('SAT','CodigoPix','');
+
     sePagCodChange(Self);
 
     edtEmitCNPJSat.Text := INI.ReadString('Emit','CNPJ','');
@@ -1745,11 +1753,6 @@ begin
     cbxRegTributario.ItemIndex := INI.ReadInteger('Emit','RegTributario',0);
     cbxRegTribISSQN.ItemIndex  := INI.ReadInteger('Emit','RegTribISSQN',0);
     cbxIndRatISSQN.ItemIndex   := INI.ReadInteger('Emit','IndRatISSQN',0);
-
-    edPathSalvarXmlSatEnvio.Text := INI.ReadString('SAT','PATH_SALVAR_ENVIO','');
-    edPathSalvarXmlSatVenda.Text := INI.ReadString('SAT','PATH_SALVAR_VENDA','');
-
-    edPathSalvarXmlSatCanc.Text := INI.ReadString('SAT','PATH_SALVAR_CANC','');
 
     edtSwHCNPJ.Text       := INI.ReadString('SwH','CNPJ','11111111111111');
     edtSwHAssinatura.Lines.Text := INI.ReadString('SwH','Assinatura',cAssinatura);
@@ -2836,6 +2839,14 @@ procedure TfrmConfig.DBEdit8KeyPress(Sender: TObject; var Key: Char);
 begin
   if not (Key in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', #8]) then
     Key := #0;
+end;
+
+procedure TfrmConfig.edCodPixKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (key in ['0'..'9',#13,#08,#09]) then
+  begin
+    key := #0;
+  end;
 end;
 
 end.

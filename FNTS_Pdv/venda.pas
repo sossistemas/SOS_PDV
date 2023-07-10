@@ -647,7 +647,7 @@ var
   Sat_FormatXML, Sat_Preview: Boolean;
   Sat_CfopPadrao, Sat_Impressora: string;
   Sat_RedeTipoInter, Sat_RedeTipoLan, Sat_RedeSeg, Sat_RedeProxy, Sat_RedeProxyPorta: integer;
-  Sat_RedeSSID, Sat_RedeCodigo, Sat_RedeIP, Sat_RedeMask, Sat_RedeGW, Sat_RedeDNS1, Sat_RedeDNS2, Sat_RedeUsuario, Sat_RedeSenha, Sat_RedeProxyIP, Sat_RedeProxyUser, Sat_RedeProxySenha: string;
+  Sat_RedeSSID, Sat_RedeCodigo, Sat_RedeIP, Sat_RedeMask, Sat_RedeGW, Sat_RedeDNS1, Sat_RedeDNS2, Sat_RedeUsuario, Sat_RedeSenha, Sat_RedeProxyIP, Sat_RedeProxyUser, Sat_RedeProxySenha, SatCodPix: string;
   SwHAssinatura, CodigoAtivacaoSAT: string;
   RecebeCupomCredito: TRecebeCupomCredito;
   vExtra: tRetExtra;
@@ -1120,22 +1120,34 @@ begin
         with Pagto.New do
         begin
           vMP := cdsRecebimentovalor.AsFloat;
+
           if cdsRecebimentoTipo.AsString = StRecDinheiro then
             cMP := mpDinheiro;
           if (cdsRecebimentoTipo.AsString = StRecCheque) or (cdsRecebimentoTipo.AsString = StRecCheque) then
             cMP := mpCheque;
-          if (cdsRecebimentoTipo.AsString = StRecCartaoCR) then begin
+          if (cdsRecebimentoTipo.AsString = StRecCartaoCR) then
+          begin
             cMP := mpCartaodeCredito;
             if cdsRecebimentocod_adm_sat.AsString <> '' then
               cAdmC := cdsRecebimentocod_adm_sat.AsInteger;
           end;
-          if (cdsRecebimentoTipo.AsString = StRecCartaoDE) then begin
+          if (cdsRecebimentoTipo.AsString = StRecCartaoDE) then
+          begin
             cMP := mpCartaodeDebito;
             if cdsRecebimentocod_adm_sat.AsString <> '' then
               cAdmC := cdsRecebimentocod_adm_sat.AsInteger;
           end;
           if (cdsRecebimentoTipo.AsString = StRecCrediario) or (cdsRecebimentoTipo.AsString = StRecConvenio) then
             cMP := mpCreditoLoja;
+
+          if cdsRecebimentoTipo.AsString = StRecPix then
+          begin
+            if (not (SatCodPix.IsEmpty) and (SatCodPix = '99')) then
+              cMP := mpOutros
+            else
+              cMP := mpPagamentoInstantaneo;
+          end;
+
         end;
         cdsRecebimento.Next;
       end;
@@ -4578,7 +4590,7 @@ begin
             relCredito.ShowReport;
           end;
 
-          if (not(rSat.Numero > 0)) and ((cdsRecebimentoTipo.AsString = StRecCartaoCR) or
+          if (not(rSat.Numero = 0)) and ((cdsRecebimentoTipo.AsString = StRecCartaoCR) or
                                         (cdsRecebimentoTipo.AsString = StRecCartaoDE)) then
              ImprimeRecebimentosCartao;
           // Excluir os arquivos temporarios
@@ -5419,6 +5431,14 @@ begin
               vPag := cdsRecebimentovalor.AsFloat
             else
               vPag := cdsRecebimentovalor.AsFloat - PTroco;
+
+            if (cdsRecebimentoTipo.AsString = StRecPix) then
+            begin
+              if (not (SatCodPix.IsEmpty) and (SatCodPix = '99')) then
+                tPag := fpOutro
+              else
+                tPag := fpPagamentoInstantaneo;
+            end;
           end;
           cdsRecebimento.Next;
         end;
@@ -6048,7 +6068,7 @@ begin
     Sat_RedeProxySenha := Ini.ReadString('Rede', 'proxy_senha', '');
 
     Sat_CfopPadrao := Ini.ReadString('Valores', 'CFOP', '5102');
-
+    SatCodPix      := Ini.ReadString('SAT', 'CodigoPix', '');
   finally
     Ini.Free;
   end;

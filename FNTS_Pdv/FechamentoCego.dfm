@@ -249,8 +249,8 @@ object frmFechamentoCego: TfrmFechamentoCego
     ParentBackground = False
     TabOrder = 2
     object Label5: TLabel
-      Left = 59
-      Top = 69
+      Left = 61
+      Top = 41
       Width = 83
       Height = 13
       Alignment = taRightJustify
@@ -258,23 +258,23 @@ object frmFechamentoCego: TfrmFechamentoCego
     end
     object Label6: TLabel
       Left = 61
-      Top = 109
+      Top = 82
       Width = 81
       Height = 13
       Alignment = taRightJustify
       Caption = 'Valor em Cheque'
     end
     object Label7: TLabel
-      Left = 234
-      Top = 69
+      Left = 236
+      Top = 41
       Width = 130
       Height = 13
       Alignment = taRightJustify
       Caption = 'Valor em Cart'#227'o de Cr'#233'dito'
     end
     object Label8: TLabel
-      Left = 238
-      Top = 109
+      Left = 236
+      Top = 82
       Width = 126
       Height = 13
       Alignment = taRightJustify
@@ -282,23 +282,30 @@ object frmFechamentoCego: TfrmFechamentoCego
     end
     object Label9: TLabel
       Left = 59
-      Top = 151
+      Top = 126
       Width = 89
       Height = 13
       Alignment = taRightJustify
       Caption = 'Valor em Convenio'
     end
     object Label10: TLabel
-      Left = 236
-      Top = 151
+      Left = 61
+      Top = 174
       Width = 87
       Height = 13
       Alignment = taRightJustify
       Caption = 'Valor em Credi'#225'rio'
     end
+    object Label11: TLabel
+      Left = 236
+      Top = 126
+      Width = 41
+      Height = 13
+      Caption = 'Valor Pix'
+    end
     object edCartaoCredito: TRzEdit
       Left = 234
-      Top = 84
+      Top = 57
       Width = 169
       Height = 20
       Text = '0,00'
@@ -313,13 +320,13 @@ object frmFechamentoCego: TfrmFechamentoCego
       ParentCtl3D = False
       ParentDoubleBuffered = False
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 4
       OnExit = edCartaoCreditoExit
       OnKeyPress = edCartaoCreditoKeyPress
     end
     object edDinheiro: TRzEdit
       Left = 59
-      Top = 84
+      Top = 57
       Width = 169
       Height = 20
       Text = '0,00'
@@ -340,7 +347,7 @@ object frmFechamentoCego: TfrmFechamentoCego
     end
     object edCheque: TRzEdit
       Left = 59
-      Top = 124
+      Top = 97
       Width = 169
       Height = 20
       Text = '0,00'
@@ -361,7 +368,7 @@ object frmFechamentoCego: TfrmFechamentoCego
     end
     object edConvenio: TRzEdit
       Left = 59
-      Top = 170
+      Top = 143
       Width = 169
       Height = 20
       Text = '0,00'
@@ -381,29 +388,8 @@ object frmFechamentoCego: TfrmFechamentoCego
       OnKeyPress = edConvenioKeyPress
     end
     object edCartaoDebito: TRzEdit
-      Left = 235
-      Top = 125
-      Width = 169
-      Height = 20
-      Text = '0,00'
-      Alignment = taRightJustify
-      Ctl3D = False
-      DoubleBuffered = False
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentCtl3D = False
-      ParentDoubleBuffered = False
-      ParentFont = False
-      TabOrder = 4
-      OnExit = edCartaoDebitoExit
-      OnKeyPress = edCartaoDebitoKeyPress
-    end
-    object edCrediario: TRzEdit
       Left = 234
-      Top = 170
+      Top = 98
       Width = 169
       Height = 20
       Text = '0,00'
@@ -419,8 +405,50 @@ object frmFechamentoCego: TfrmFechamentoCego
       ParentDoubleBuffered = False
       ParentFont = False
       TabOrder = 5
+      OnExit = edCartaoDebitoExit
+      OnKeyPress = edCartaoDebitoKeyPress
+    end
+    object edCrediario: TRzEdit
+      Left = 59
+      Top = 191
+      Width = 169
+      Height = 20
+      Text = '0,00'
+      Alignment = taRightJustify
+      Ctl3D = False
+      DoubleBuffered = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 3
       OnExit = edCrediarioExit
       OnKeyPress = edCrediarioKeyPress
+    end
+    object edPix: TRzEdit
+      Left = 234
+      Top = 143
+      Width = 169
+      Height = 20
+      Text = '0,00'
+      Alignment = taRightJustify
+      Ctl3D = False
+      DoubleBuffered = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 6
+      OnExit = edPixExit
+      OnKeyPress = edPixKeyPress
     end
   end
   object AdvSmoothExpanderPanel2: TAdvSmoothExpanderPanel
@@ -647,7 +675,7 @@ object frmFechamentoCego: TfrmFechamentoCego
     PrintOptions.PrintMode = pmSplit
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42970.860474629600000000
-    ReportOptions.LastChange = 45100.535317627310000000
+    ReportOptions.LastChange = 45112.532722442130000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -963,7 +991,7 @@ object frmFechamentoCego: TfrmFechamentoCego
       object MasterData: TfrxMasterData
         FillType = ftBrush
         Frame.Typ = []
-        Height = 136.050083580000000000
+        Height = 142.716750250000000000
         Top = 302.362400000000000000
         Width = 270.992301000000000000
         OnBeforePrint = 'MasterData2OnBeforePrint'
@@ -975,7 +1003,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 61.456454310000000000
-          Top = 2.750000000000000000
+          Top = 1.750000000000000000
           Width = 66.141732280000000000
           Height = 15.118110240000000000
           DataField = 'DINHEIRO_INF'
@@ -999,7 +1027,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 60.850393700000000000
-          Top = 71.665306670000000000
+          Top = 83.905511810000000000
           Width = 66.141732280000000000
           Height = 15.118110240000000000
           DataField = 'CHEQUE_INF'
@@ -1023,7 +1051,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 60.850393700000000000
-          Top = 24.677165350000000000
+          Top = 22.299212598425200000
           Width = 66.141732280000000000
           Height = 15.118110240000000000
           DataField = 'C_CRED_INF'
@@ -1047,7 +1075,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 60.850393700000000000
-          Top = 48.531973340000000000
+          Top = 43.255102220000000000
           Width = 66.141732280000000000
           Height = 15.118110240000000000
           DataField = 'C_DEB_INF'
@@ -1071,7 +1099,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 60.850393700000000000
-          Top = 94.798640010000000000
+          Top = 104.692913385827000000
           Width = 66.141732280000000000
           Height = 15.118110240000000000
           DataField = 'CONVENIO_INF'
@@ -1095,7 +1123,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 60.850393700000000000
-          Top = 117.931973340000000000
+          Top = 125.265306670000000000
           Width = 66.141732280000000000
           Height = 15.118110240000000000
           DataField = 'CARTEIRA_INF'
@@ -1117,7 +1145,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         object Memo12: TfrxMemoView
           Align = baLeft
           AllowVectorExport = True
-          Top = 71.665306672000000000
+          Top = 84.093537780000000000
           Width = 60.850393700000000000
           Height = 15.118110240000000000
           Font.Charset = ANSI_CHARSET
@@ -1133,7 +1161,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         object Memo15: TfrxMemoView
           Align = baLeft
           AllowVectorExport = True
-          Top = 118.265306670000000000
+          Top = 125.265306670000000000
           Width = 60.850393700000000000
           Height = 15.118110240000000000
           Font.Charset = ANSI_CHARSET
@@ -1149,7 +1177,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         object Memo16: TfrxMemoView
           Align = baLeft
           AllowVectorExport = True
-          Top = 24.677165354330700000
+          Top = 22.335884450000000000
           Width = 60.850393700000000000
           Height = 15.118110240000000000
           Font.Charset = ANSI_CHARSET
@@ -1165,7 +1193,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         object Memo17: TfrxMemoView
           Align = baLeft
           AllowVectorExport = True
-          Top = 48.531973338000000000
+          Top = 42.921768890000000000
           Width = 60.850393700000000000
           Height = 15.118110240000000000
           Font.Charset = ANSI_CHARSET
@@ -1181,7 +1209,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         object Memo18: TfrxMemoView
           Align = baLeft
           AllowVectorExport = True
-          Top = 94.798640010000000000
+          Top = 104.679422220000000000
           Width = 60.850393700000000000
           Height = 15.118110240000000000
           Font.Charset = ANSI_CHARSET
@@ -1198,7 +1226,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           IndexTag = 1
           AllowVectorExport = True
           Left = 132.283464570000000000
-          Top = 2.265306670000000000
+          Top = 1.750000000000000000
           Width = 64.251968500000000000
           Height = 15.118110240000000000
           DataField = 'DINHEIRO_SISTEMA'
@@ -1221,7 +1249,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           IndexTag = 1
           AllowVectorExport = True
           Left = 132.283464570000000000
-          Top = 71.665306670000000000
+          Top = 83.905511810000000000
           Width = 64.251968500000000000
           Height = 15.118110240000000000
           DataField = 'CHEQUE_SISTEMA'
@@ -1244,7 +1272,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           IndexTag = 1
           AllowVectorExport = True
           Left = 132.283464570000000000
-          Top = 24.677165350000000000
+          Top = 22.299212598425200000
           Width = 64.251968500000000000
           Height = 15.118110240000000000
           DataField = 'C_CRED_SISTEMA'
@@ -1267,7 +1295,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           IndexTag = 1
           AllowVectorExport = True
           Left = 132.283464570000000000
-          Top = 48.531973340000000000
+          Top = 43.255102220000000000
           Width = 64.251968500000000000
           Height = 15.118110240000000000
           DataField = 'C_DEB_SISTEMA'
@@ -1290,7 +1318,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           IndexTag = 1
           AllowVectorExport = True
           Left = 132.283464570000000000
-          Top = 94.798640010000000000
+          Top = 104.692913385827000000
           Width = 64.251968500000000000
           Height = 15.118110240000000000
           DataField = 'CONVENIO_SISTEMA'
@@ -1313,7 +1341,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           IndexTag = 1
           AllowVectorExport = True
           Left = 132.283464570000000000
-          Top = 117.931973340000000000
+          Top = 125.265306670000000000
           Width = 64.251968500000000000
           Height = 15.118110240000000000
           DataField = 'CARTEIRA_SISTEMA'
@@ -1337,7 +1365,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 196.535433070000000000
-          Top = 2.265306670000000000
+          Top = 1.750000000000000000
           Width = 68.031496060000000000
           Height = 15.118110240000000000
           DataField = 'DIF_DINHEIRO'
@@ -1361,7 +1389,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 196.535433070000000000
-          Top = 71.665306670000000000
+          Top = 83.905511810000000000
           Width = 68.031496060000000000
           Height = 15.118110240000000000
           DataField = 'DIF_CHEQUE'
@@ -1385,7 +1413,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 196.535433070000000000
-          Top = 24.677165350000000000
+          Top = 22.299212598425200000
           Width = 68.031496060000000000
           Height = 15.118110240000000000
           DataField = 'DIF_CART_CRED'
@@ -1409,7 +1437,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 196.535433070000000000
-          Top = 48.531973340000000000
+          Top = 43.255102220000000000
           Width = 68.031496060000000000
           Height = 15.118110240000000000
           DataField = 'DIF_CART_DEB'
@@ -1433,7 +1461,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 196.535433070000000000
-          Top = 94.798640010000000000
+          Top = 104.692913385827000000
           Width = 68.031496060000000000
           Height = 15.118110240000000000
           DataField = 'DIF_CONVENIO'
@@ -1457,7 +1485,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baLeft
           AllowVectorExport = True
           Left = 196.535433070000000000
-          Top = 117.931973340000000000
+          Top = 125.265306670000000000
           Width = 68.031496060000000000
           Height = 15.118110240000000000
           DataField = 'DIF_CARTEIRA'
@@ -1479,7 +1507,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         object Memo11: TfrxMemoView
           AllowVectorExport = True
           Left = 0.606060610000000000
-          Top = 3.750000000000000000
+          Top = 1.750000000000000000
           Width = 60.850393700000000000
           Height = 15.118110240000000000
           Font.Charset = ANSI_CHARSET
@@ -1490,6 +1518,90 @@ object frmFechamentoCego: TfrmFechamentoCego
           Frame.Typ = []
           Memo.UTF8W = (
             'Dinheiro')
+          ParentFont = False
+        end
+        object Memo53: TfrxMemoView
+          Align = baLeft
+          AllowVectorExport = True
+          Top = 63.507653330000000000
+          Width = 60.850393700000000000
+          Height = 15.118110240000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Courier New'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Pix')
+          ParentFont = False
+        end
+        object Memo54: TfrxMemoView
+          IndexTag = 1
+          Align = baLeft
+          AllowVectorExport = True
+          Left = 60.850393700000000000
+          Top = 63.507653330000000000
+          Width = 66.141732280000000000
+          Height = 15.118110240000000000
+          DataSet = frxDadosFech
+          DataSetName = 'frxDadosFech'
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Courier New'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[frxDadosFech."PIX_INF"]')
+          ParentFont = False
+        end
+        object Memo55: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 132.766404200000000000
+          Top = 63.507653330000000000
+          Width = 64.251968500000000000
+          Height = 15.118110240000000000
+          DataSet = frxDadosFech
+          DataSetName = 'frxDadosFech'
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Courier New'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[frxDadosFech."PIX_SISTEMA"]')
+          ParentFont = False
+        end
+        object Memo56: TfrxMemoView
+          IndexTag = 1
+          Align = baLeft
+          AllowVectorExport = True
+          Left = 197.018372700000000000
+          Top = 63.496062992126000000
+          Width = 68.031496060000000000
+          Height = 15.118110240000000000
+          DataSet = frxDadosFech
+          DataSetName = 'frxDadosFech'
+          DisplayFormat.FormatStr = '%2.2f'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Courier New'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[frxDadosFech."DIF_PIX"]')
           ParentFont = False
         end
       end
@@ -1605,13 +1717,13 @@ object frmFechamentoCego: TfrmFechamentoCego
       object Footer1: TfrxFooter
         FillType = ftBrush
         Frame.Typ = []
-        Height = 30.230983320000000000
-        Top = 461.102660000000000000
+        Height = 28.897649990000000000
+        Top = 468.661720000000000000
         Width = 270.992301000000000000
         object Memo39: TfrxMemoView
           Align = baLeft
           AllowVectorExport = True
-          Top = 8.333333330000000000
+          Top = 5.669291338582677000
           Width = 43.154916670000000000
           Height = 15.118110240000000000
           Font.Charset = ANSI_CHARSET
@@ -1628,7 +1740,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           IndexTag = 1
           AllowVectorExport = True
           Left = 55.154916670000000000
-          Top = 8.333333330000000000
+          Top = 5.669291340000000000
           Width = 71.811023620000000000
           Height = 15.118110240000000000
           AutoWidth = True
@@ -1650,9 +1762,9 @@ object frmFechamentoCego: TfrmFechamentoCego
         object frxDadosFechSOMA_SIST: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
-          Left = 127.965940290000000000
-          Top = 8.333333330000000000
-          Width = 71.811023620000000000
+          Left = 126.965940290000000000
+          Top = 5.669291340000000000
+          Width = 69.144356950000000000
           Height = 15.118110240000000000
           AutoWidth = True
           DataSet = frxDadosFech
@@ -1674,7 +1786,7 @@ object frmFechamentoCego: TfrmFechamentoCego
           Align = baCenter
           AllowVectorExport = True
           Left = -15.685049500000000000
-          Top = 27.779220000000000000
+          Top = 25.779220000000000000
           Width = 302.362400000000000000
           Color = clBlack
           Frame.Style = fsDot
@@ -1686,7 +1798,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         FillType = ftBrush
         Frame.Typ = []
         Height = 52.088434550000000000
-        Top = 514.016080000000000000
+        Top = 521.575140000000000000
         Width = 270.992301000000000000
         object Memo36: TfrxMemoView
           Anchors = [fraTop]
@@ -1744,7 +1856,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         FillType = ftBrush
         Frame.Typ = []
         Height = 16.451443580000000000
-        Top = 589.606680000000000000
+        Top = 597.165740000000000000
         Width = 270.992301000000000000
         DataSet = frxDadosTef
         DataSetName = 'frxDadosTef'
@@ -1795,7 +1907,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         FillType = ftBrush
         Frame.Typ = []
         Height = 159.470476430000000000
-        Top = 627.401980000000000000
+        Top = 634.961040000000000000
         Width = 270.992301000000000000
         object Memo40: TfrxMemoView
           Align = baLeft
@@ -2047,7 +2159,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         FillType = ftBrush
         Frame.Typ = []
         Height = 31.201941520000000000
-        Top = 808.819420000000000000
+        Top = 816.378480000000000000
         Width = 270.992301000000000000
         object Memo48: TfrxMemoView
           Anchors = [fraTop]
@@ -2137,7 +2249,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         FillType = ftBrush
         Frame.Typ = []
         Height = 15.788291120000000000
-        Top = 861.732840000000000000
+        Top = 869.291900000000000000
         Width = 270.992301000000000000
         DataSet = frxDadosSangSupr
         DataSetName = 'frxDadosSangSupr'
@@ -2231,7 +2343,7 @@ object frmFechamentoCego: TfrmFechamentoCego
         FillType = ftBrush
         Frame.Typ = []
         Height = 55.478046670000000000
-        Top = 937.323440000000000000
+        Top = 944.882500000000000000
         Width = 270.992301000000000000
         object Line4: TfrxLineView
           Align = baCenter
@@ -2601,6 +2713,17 @@ object frmFechamentoCego: TfrmFechamentoCego
     object cdsTempDadosSOMA_SIST: TCurrencyField
       FieldKind = fkInternalCalc
       FieldName = 'SOMA_SIST'
+    end
+    object cdsTempDadosPIX_INF: TCurrencyField
+      FieldName = 'PIX_INF'
+    end
+    object cdsTempDadosPIX_SISTEMA: TCurrencyField
+      FieldName = 'PIX_SISTEMA'
+    end
+    object cdsTempDadosDIF_PIX: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'DIF_PIX'
+      Calculated = True
     end
   end
   object cds_temp_Tef: TClientDataSet

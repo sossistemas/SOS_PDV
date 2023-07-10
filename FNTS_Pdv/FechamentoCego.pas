@@ -90,6 +90,11 @@ type
     cdsTempSANGSUDESCRICAO: TStringField;
     cdsTempSANGSUVALOR: TCurrencyField;
     frxDadosSangSupr: TfrxDBDataset;
+    cdsTempDadosPIX_INF: TCurrencyField;
+    cdsTempDadosPIX_SISTEMA: TCurrencyField;
+    Label11: TLabel;
+    edPix: TRzEdit;
+    cdsTempDadosDIF_PIX: TCurrencyField;
     procedure AdvMetroButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure AdvGlowButton1Click(Sender: TObject);
@@ -109,6 +114,8 @@ type
     procedure edCartaoDebitoExit(Sender: TObject);
     procedure edCartaoDebitoKeyPress(Sender: TObject; var Key: Char);
     procedure frxReport1BeforePrint(Sender: TfrxReportComponent);
+    procedure edPixExit(Sender: TObject);
+    procedure edPixKeyPress(Sender: TObject; var Key: Char);
   private
     FHora: string;
     FDataUltFecha: TDateTime;
@@ -135,7 +142,7 @@ type
 var
   frmFechamentoCego: TfrmFechamentoCego;
 
-  vDINHEIRO, vCONVENIO, vCARTEIRA, vCARTAOCRED, vCARTAODEB, vCHEQUE, vTROCO, vSANGRIA, vSUPRIMENTO : Currency;
+  vDINHEIRO, vCONVENIO, vCARTEIRA, vCARTAOCRED, vCARTAODEB, vCHEQUE, vTROCO, vSANGRIA, vSUPRIMENTO, vPIX : Currency;
 
   ImpSup, ImpSag : Boolean;
 implementation
@@ -158,7 +165,7 @@ begin
 
       query.Close;
       query.sql.clear;
-      query.sql.add('insert into fechamento_cego (Data, hora, operador, dinheiro, cheque, cartao_credito, cartao_debito, convenio, crediario, ex) values (:Data, :hora, :operador, :dinheiro, :cheque, :cartao_credito, :cartao_debito, :convenio, :crediario, :ex)');
+      query.sql.add('insert into fechamento_cego (Data, hora, operador, dinheiro, cheque, cartao_credito, cartao_debito, convenio, crediario, ex, pix) values (:Data, :hora, :operador, :dinheiro, :cheque, :cartao_credito, :cartao_debito, :convenio, :crediario, :ex, :pix)');
       query.ParamByName('ex').asstring            := 'N';
       query.ParamByName('data').asdatetime        := FDataFechamento; //ed_data.Date;
       query.ParamByName('hora').AsString          := FHora;
@@ -169,6 +176,7 @@ begin
       query.ParamByName('cartao_debito').AsFloat  := StrToFloat(edCartaoDebito.Text);
       query.ParamByName('convenio').AsFloat       := StrToFloat(edConvenio.Text);
       query.ParamByName('crediario').AsFloat      := StrToFloat(edCrediario.Text);
+      query.ParamByName('pix').AsFloat            := StrToFloat(edPix.Text);
       query.ExecSQL;
 
       query.Close;
@@ -264,6 +272,7 @@ begin
     cdsTempDadosDIF_CHEQUE.AsCurrency     := cdsTempDadosCHEQUE_INF.AsCurrency - cdsTempDadosCHEQUE_SISTEMA.AsCurrency;
     cdsTempDadosDIF_ESTORNO.AsCurrency    := cdsTempDadosESTORNO_INF.AsCurrency - cdsTempDadosESTORNO_SISTEMA.AsCurrency;
     cdsTempDadosDIF_CUPOM_CRED.AsCurrency := cdsTempDadosCUPOM_CRED_INF.AsCurrency - cdsTempDadosCUPOM_CRED_SISTEMA.AsCurrency;
+    cdsTempDadosDIF_PIX.AsCurrency        := cdsTempDadosPIX_INF.AsCurrency - cdsTempDadosPIX_SISTEMA.AsCurrency;
 
 
     cdsTempDadosSOMA_INF.AsCurrency :=  cdsTempDadosDINHEIRO_INF.AsCurrency +
@@ -273,7 +282,8 @@ begin
                                         cdsTempDadosC_DEB_INF.AsCurrency    +
                                         cdsTempDadosCHEQUE_INF.AsCurrency   +
                                         cdsTempDadosESTORNO_INF.AsCurrency  +
-                                        cdsTempDadosCUPOM_CRED_INF.AsCurrency;
+                                        cdsTempDadosCUPOM_CRED_INF.AsCurrency +
+                                        cdsTempDadosPIX_INF.AsCurrency;
 
     cdsTempDadosSOMA_SIST.AsCurrency := cdsTempDadosDINHEIRO_SISTEMA.AsCurrency +
                                         cdsTempDadosCONVENIO_SISTEMA.AsCurrency +
@@ -282,7 +292,8 @@ begin
                                         cdsTempDadosC_DEB_SISTEMA.AsCurrency    +
                                         cdsTempDadosCHEQUE_SISTEMA.AsCurrency   +
                                         cdsTempDadosESTORNO_SISTEMA.AsCurrency  +
-                                        cdsTempDadosCUPOM_CRED_SISTEMA.AsCurrency;
+                                        cdsTempDadosCUPOM_CRED_SISTEMA.AsCurrency +
+                                        cdsTempDadosPIX_SISTEMA.AsCurrency;
 
 
 
@@ -377,6 +388,20 @@ begin
     Key := #0;
 end;
 
+procedure TfrmFechamentoCego.edPixExit(Sender: TObject);
+begin
+  if edPix.Text = EmptyStr then
+    edPix.Text := '0';
+
+  edPix.Text := FormatFloat('0.00',StrToFloat(edPix.Text));
+end;
+
+procedure TfrmFechamentoCego.edPixKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (key in ['0'..'9',',',#13,#08,#09]) then
+    Key := #0;
+end;
+
 procedure TfrmFechamentoCego.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
@@ -462,6 +487,7 @@ begin
   vTROCO      := 0;
   vSANGRIA    := 0;
   vSUPRIMENTO := 0;
+  vPIX        := 0;
   bMovCaixa   := True;
   ImpSup      := False;
   ImpSag      := False;
@@ -495,7 +521,8 @@ begin
       qryFechamento.SQL.Add('       fc.cartao_credito,');
       qryFechamento.SQL.Add('       fc.cartao_debito,');
       qryFechamento.SQL.Add('       fc.convenio,');
-      qryFechamento.SQL.Add('       fc.crediario');
+      qryFechamento.SQL.Add('       fc.crediario,');
+      qryFechamento.SQL.Add('       fc.pix');
       qryFechamento.SQL.Add('from fechamento_cego fc');
       qryFechamento.SQL.Add('join adm on adm.codigo = fc.operador');
       qryFechamento.SQL.Add('where fc.data = :dt');
@@ -560,7 +587,7 @@ begin
       qryValoresSistema.SQL.Add('  join cupom_forma CF on CF.cod_cupom = C.CODIGO');
       qryValoresSistema.SQL.Add('  where C.cancelado <> 1');
       qryValoresSistema.SQL.Add('  and C.DATA + C.hora >= :data');
-      qryValoresSistema.SQL.Add('  and CF.FORMA in (''DINHEIRO'',''CONVENIO'',''CARTEIRA'',''CHEQUE'') ');
+      qryValoresSistema.SQL.Add('  and CF.FORMA in (''DINHEIRO'',''CONVENIO'',''CARTEIRA'',''CHEQUE'', ''PIX'') ');
       qryValoresSistema.SQL.Add('  group by 1)');
       qryValoresSistema.SQL.Add('select C.FORMA,');
       qryValoresSistema.SQL.Add('       C.soma_valor');
@@ -570,23 +597,25 @@ begin
 
       while not qryValoresSistema.Eof do
       begin
-        case AnsiIndexStr(UpperCase(qryValoresSistema.FieldByName('FORMA').Value), ['DINHEIRO','CONVENIO','CARTEIRA','CHEQUE']) of
+        case AnsiIndexStr(UpperCase(qryValoresSistema.FieldByName('FORMA').Value), ['DINHEIRO','CONVENIO','CARTEIRA','CHEQUE', 'PIX']) of
         0: vDINHEIRO   := qryValoresSistema.FieldByName('soma_valor').Value;
         1: vCONVENIO   := qryValoresSistema.FieldByName('soma_valor').Value;
         2: vCARTEIRA   := qryValoresSistema.FieldByName('soma_valor').Value;
         3: vCHEQUE     := qryValoresSistema.FieldByName('soma_valor').Value;
+        4: vPIX        := qryValoresSistema.FieldByName('soma_valor').Value;
         end;
 
         qryValoresSistema.Next;
       end;
 
-      for i := 0 to 3 do
+      for i := 0 to 4 do
       begin
         case i of
         0: Insere_cdsTempDados('DINHEIRO_SISTEMA','DINHEIRO_INF',((vDINHEIRO + vSUPRIMENTO) - (vSANGRIA + vTROCO)),qryFechamento.FieldByName('dinheiro').Value);
         1: Insere_cdsTempDados('CONVENIO_SISTEMA','CONVENIO_INF',vCONVENIO,qryFechamento.FieldByName('convenio').Value);
         2: Insere_cdsTempDados('CARTEIRA_SISTEMA','CARTEIRA_INF',vCARTEIRA,qryFechamento.FieldByName('crediario').Value);
         3: Insere_cdsTempDados('CHEQUE_SISTEMA','CHEQUE_INF',vCHEQUE,qryFechamento.FieldByName('cheque').Value);
+        4: Insere_cdsTempDados('PIX_SISTEMA','PIX_INF',vPIX, qryFechamento.FieldByName('pix').Value);
         end;
       end;
 

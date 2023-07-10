@@ -16,7 +16,7 @@ type
     Valor:Double;
   end;
   tTipoMovimento = (tmDinheiro, tmCrediario, tmConvenio, tmCartaoCredito,
-      tmCartaoDebito, tmCheque, tmTEF, tmDesconto, tmAcrescimo);
+      tmCartaoDebito, tmCheque, tmTEF, tmPix, tmDesconto, tmAcrescimo);
   tTipoValor = (tvRecebimento, tvDesconto, tvAcrescimo);
   TfrmReceber_Valor = class(TForm)
     Panel1: TPanel;
@@ -66,7 +66,6 @@ implementation
 uses principal, System.Math, LerCupomCreditoReceber;
 
 {$R *.dfm}
-
 
 function RetornaValorRecebimento(ValorTotal:Double;RecebimentoMaior:Boolean;
    Tipo:tTipoMovimento;TipoValor:tTipoValor):tValorReceber;
@@ -137,7 +136,7 @@ begin
   begin
     if RoundTo(edValor.Value,-2) > RoundTo(ValorMaximo,-2) then
     begin
-      Application.MessageBox('Valor informádo é superior ao saldo a receber do cupom!','Atenção!',MB_ICONINFORMATION);
+      Application.MessageBox('Valor informado é superior ao saldo a receber do cupom!','Atenção!',MB_ICONINFORMATION);
       edValor.SetFocus;
       Exit;
     end;

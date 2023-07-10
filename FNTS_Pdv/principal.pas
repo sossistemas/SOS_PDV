@@ -177,7 +177,7 @@ const
   StRecCheque = 'CHEQUE';
   StRecEstorno = 'ESTORNO';
   StRecCredito = 'CUPOM CREDITO';
-
+  StRecPix     = 'PIX';
 
 
 type

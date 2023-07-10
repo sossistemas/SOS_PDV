@@ -411,8 +411,8 @@ object frmConfig: TfrmConfig
     Top = 48
     Width = 1361
     Height = 442
-    ActivePage = PageSheet7
-    ActivePageIndex = 7
+    ActivePage = PageSheet6
+    ActivePageIndex = 6
     AdaptiveColors = True
     Align = alClient
     BackgroundColor = 15264234
@@ -4867,11 +4867,13 @@ object frmConfig: TfrmConfig
           Top = 1
           Width = 1359
           Height = 419
-          ActivePage = Impressao
+          ActivePage = tsDadosSAT
           Align = alClient
           TabOrder = 0
           object tsDadosSAT: TTabSheet
             Caption = 'Dados do SAT CFe'
+            ExplicitLeft = 5
+            ExplicitTop = 23
             object Label54: TLabel
               Left = 19
               Top = 58
@@ -4945,6 +4947,13 @@ object frmConfig: TfrmConfig
               Caption = 'Inicializa'#231#227'o'
               Color = 14803425
               ParentColor = False
+            end
+            object Label97: TLabel
+              Left = 903
+              Top = 58
+              Width = 40
+              Height = 13
+              Caption = 'Cod. Pix'
             end
             object edLog: TEdit
               Left = 19
@@ -5334,6 +5343,16 @@ object frmConfig: TfrmConfig
               Align = alBottom
               ScrollBars = ssBoth
               TabOrder = 17
+            end
+            object edCodPix: TEdit
+              Left = 904
+              Top = 74
+              Width = 30
+              Height = 21
+              Alignment = taCenter
+              MaxLength = 2
+              TabOrder = 18
+              OnKeyPress = edCodPixKeyPress
             end
           end
           object tsDadosEmit: TTabSheet
@@ -5997,7 +6016,7 @@ object frmConfig: TfrmConfig
             Caption = 'Dados Adcionais'
             ImageIndex = 6
             object Label83: TLabel
-              Left = 10
+              Left = 6
               Top = 7
               Width = 64
               Height = 13
@@ -6091,7 +6110,7 @@ object frmConfig: TfrmConfig
               OnClick = SpeedButton3Click
             end
             object edCfopPadrao: TEdit
-              Left = 9
+              Left = 5
               Top = 26
               Width = 112
               Height = 21
@@ -7187,10 +7206,10 @@ object frmConfig: TfrmConfig
     Top = 311
   end
   object ACBrNFe1: TACBrNFe
-    Configuracoes.Geral.SSLLib = libCapicomDelphiSoap
-    Configuracoes.Geral.SSLCryptLib = cryCapicom
+    Configuracoes.Geral.SSLLib = libCustom
+    Configuracoes.Geral.SSLCryptLib = cryNone
     Configuracoes.Geral.SSLHttpLib = httpIndy
-    Configuracoes.Geral.SSLXmlSignLib = xsMsXmlCapicom
+    Configuracoes.Geral.SSLXmlSignLib = xsNone
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
     Configuracoes.Geral.VersaoQRCode = veqr000
     Configuracoes.Arquivos.OrdenacaoPath = <>
